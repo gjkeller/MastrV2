@@ -1,4 +1,4 @@
 /textmate-hjson/
 config.hjson
-*.idea
+.idea
 *.iml
