@@ -6,18 +6,10 @@
  * https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.
  */
 
-package com.okgabe.mastrv2.util;
+package com.okgabe.mastr2.util;
 
-public enum LogType {
-    WASTE(5), DEBUG(4), INFO(3), WARN(2), CRITICAL(1);
-
-    private int level;
-
-    LogType(int level) {
-        this.level = level;
-    }
-
-    public int getLevel() {
-        return level;
+public class Checks {
+    public static boolean isNullString(String s){
+        return s == null || s.trim().equals("") || s.equalsIgnoreCase("null");
     }
 }
