@@ -1,0 +1,39 @@
+{
+///////////////////////////////////
+//     Mastr Configuration File  //
+//      Bot created by okgabe    //
+//     https://okgabe.com/mastr/ //
+///////////////////////////////////
+// Create a copy of this configuration
+// and rename it "config.hjson"
+
+    "version": "BETA 1.0",
+    "mongodb username": "Username",
+    "mongodb password": "Password",
+    // Token to log into bot
+    "bot token": "Bot token",
+
+    // IDs of individuals that will **always** have bot owner permissions
+    "managers": ["User ID"],
+
+    // Bot access mode
+        // Options:
+        // Bot Manager (only bot managers/owners)
+        // Bot Administrator (only bot admins and up)
+        // Bot Staff (only bot staff and up)
+        // Default
+    "bot mode": "default",
+
+    // Debug mode
+        // Options:
+        // Trace (prints all messages)
+        // Debug (print normal debug messages)
+        // Info (normal logging up to info level)
+        // Warn (only logs warnings and above)
+        // Error (only logs errors)
+    "log mode": "info"
+}
+
+
+
+
