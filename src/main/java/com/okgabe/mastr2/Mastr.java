@@ -135,21 +135,4 @@ public class Mastr {
             return value;
         }
     }
-
-    private static Level getLevel(String level){
-        switch(level.toLowerCase()){
-            case "error":
-                return Level.ERROR;
-            case "warn":
-                return Level.WARN;
-            case "info":
-                return Level.INFO;
-            case "debug":
-                return Level.DEBUG;
-            case "trace":
-                return Level.TRACE;
-            default:
-                return null;
-        }
-    }
 }
