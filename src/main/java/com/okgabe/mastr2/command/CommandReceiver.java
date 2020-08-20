@@ -6,11 +6,7 @@
  * https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.
  */
 
-package com.okgabe.mastr2.permission;
+package com.okgabe.mastr2.command;
 
-import com.okgabe.mastr2.Mastr;
-
-public class BotRoleManager {
-    private Mastr mastr;
-
+public class CommandReceiver {
 }

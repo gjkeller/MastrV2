@@ -6,11 +6,10 @@
  * https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.
  */
 
-package com.okgabe.mastr2.permission;
+package com.okgabe.mastr2.command.commands;
 
-import com.okgabe.mastr2.Mastr;
+import com.okgabe.mastr2.command.CommandBase;
 
-public class BotRoleManager {
-    private Mastr mastr;
+public class PingCommand extends CommandBase {
 
 }

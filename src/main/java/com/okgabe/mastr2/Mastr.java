@@ -10,10 +10,11 @@ package com.okgabe.mastr2;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
+import com.mongodb.MongoException;
+import com.okgabe.mastr2.db.DatabaseManager;
 import com.okgabe.mastr2.event.EventManager;
 import com.okgabe.mastr2.util.BotRole;
 import com.okgabe.mastr2.util.Checks;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import org.hjson.JsonObject;
@@ -36,8 +37,8 @@ public class Mastr {
     private static String VERSION;
     private static Logger logger = LoggerFactory.getLogger(Mastr.class);
     private ShardManager shardManager;
-    private JDA jda;
     private EventManager eventManager;
+    private DatabaseManager databaseManager;
 
     public static void main(String[] args) {
         System.out.println("Starting up Mastr...");
@@ -94,8 +95,7 @@ public class Mastr {
         }
 
         /* Other strings and info */
-        String dbUsername = checkValue(file.getString("mongodb username", "null"), "mongodb username");
-        String dbPassword = checkValue(file.getString("mongodb password", "null"), "mongodb password");
+        String dbConnectionString = checkValue(file.getString("mongodb connection string", "null"), "mongodb connection string");
         String token = checkValue(file.getString("bot token", "null"), "bot token");
 
         Iterator<JsonValue> managerIter = file.get("managers").asArray().iterator();
@@ -108,14 +108,24 @@ public class Mastr {
             }
         }
 
-        new Mastr(token, dbUsername, dbPassword, botMode, managerList);
+        new Mastr(token, dbConnectionString, botMode, managerList);
     }
 
-    private Mastr(String token, String dbUsername, String dbPassword, BotRole botMode, Collection<String> managers){
+    private Mastr(String token, String dbConnectionString, BotRole botMode, Collection<String> managers){
+        logger.info("Logging into the database...");
+        try{
+            databaseManager = new DatabaseManager(dbConnectionString);
+        }
+        catch(MongoException ex){
+            logger.error("Unable to log into the database! Please provide a valid connection-string.");
+            ex.printStackTrace();
+            System.exit(-1);
+        }
+
         logger.info("Starting the bot...");
         try{
             DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(token);
-            EventManager eventManager = new EventManager();
+            EventManager eventManager = new EventManager(this);
             builder.addEventListeners(eventManager);
             shardManager = builder.build();
         }
@@ -134,5 +144,13 @@ public class Mastr {
         else{
             return value;
         }
+    }
+
+    public ShardManager getShardManager() {
+        return shardManager;
+    }
+
+    public EventManager getEventManager() {
+        return eventManager;
     }
 }

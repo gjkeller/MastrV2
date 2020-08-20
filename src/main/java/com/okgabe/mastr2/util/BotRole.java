@@ -9,7 +9,9 @@
 package com.okgabe.mastr2.util;
 
 public enum BotRole {
-    DEFAULT("Default", 0), BOT_STAFF("Bot Staff", 1), BOT_ADMINISTRATOR("Bot Administrator", 2), BOT_MANAGER("Bot Manager", 3);
+    UNKNOWN("Unknown", -1), PERMANENT_SUSPENSION("Permanent Suspension", 0), TEMPORARY_SUSPENSION("Temporary Suspension", 1),
+    AUTOMATICALLY_SUSPENDED("Automatic Suspension", 2), DEFAULT("Default", 5), BOT_STAFF("Bot Staff", 20),
+    BOT_ADMINISTRATOR("Bot Administrator", 50), BOT_MANAGER("Bot Manager", 100), BOT_FOUNDER("Bot Founder", 127);
 
     private String name;
     private int level;
@@ -17,6 +19,14 @@ public enum BotRole {
     BotRole(String name, int level) {
         this.name = name;
         this.level = level;
+    }
+
+    public boolean isAtOrAbove(BotRole role){
+        return this.level >= role.getLevel();
+    }
+
+    public boolean isAbove(BotRole role){
+        return this.level > role.getLevel();
     }
 
     public String getName() {
@@ -38,7 +48,20 @@ public enum BotRole {
             case "bot manager":
                 return BOT_MANAGER;
             default:
-                return null;
+                return UNKNOWN;
         }
+    }
+
+    public static BotRole parse(int level){
+        for(BotRole r : values()){
+            if(r.level == level) return r;
+        }
+        
+        return null;
+    }
+
+    @Override
+    public String toString(){
+        return name;
     }
 }
