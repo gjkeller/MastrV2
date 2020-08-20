@@ -10,6 +10,7 @@ package com.okgabe.mastr2.db;
 
 import com.mongodb.MongoException;
 import com.mongodb.client.*;
+import com.okgabe.mastr2.entity.BotGuild;
 import com.okgabe.mastr2.entity.BotUser;
 import com.okgabe.mastr2.entity.EntityAdaptor;
 import org.bson.Document;
@@ -21,12 +22,14 @@ public class DatabaseManager {
     private MongoClient client;
     private MongoDatabase mastrDatabase;
     private MongoCollection<Document> users;
+    private MongoCollection<Document> guilds;
     private static Logger logger = LoggerFactory.getLogger(DatabaseManager.class);
 
     public DatabaseManager(String connectionString) throws MongoException  {
         client = MongoClients.create(connectionString);
         mastrDatabase = client.getDatabase("mastr");
         users = mastrDatabase.getCollection("users");
+        guilds = mastrDatabase.getCollection("guilds");
     }
 
     public BotUser getBotUser(long id){
@@ -37,5 +40,15 @@ public class DatabaseManager {
         Document user = userIter.cursor().tryNext();
 
         return EntityAdaptor.toBotUser(user);
+    }
+
+    public BotGuild getBotGuild(long id){
+        Document search = new Document();
+        search.put("_id", id);
+
+        FindIterable<Document> guildIter = guilds.find(search);
+        Document guild = guildIter.cursor().tryNext();
+
+        return EntityAdaptor.toBotGuild(guild);
     }
 }

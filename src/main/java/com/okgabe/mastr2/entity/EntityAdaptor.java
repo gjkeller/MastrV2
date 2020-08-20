@@ -10,6 +10,7 @@ package com.okgabe.mastr2.entity;
 
 import com.mongodb.lang.Nullable;
 import com.okgabe.mastr2.util.BotRole;
+import com.okgabe.mastr2.util.GuildTier;
 import org.bson.Document;
 
 public class EntityAdaptor {
@@ -27,6 +28,23 @@ public class EntityAdaptor {
         newDoc.put("roleId", botUser.getRole().getLevel());
         newDoc.put("timesUsed", botUser.getTimesUsed());
         newDoc.put("suspensionLength", botUser.getSuspensionLength());
+
+        return newDoc;
+    }
+
+    public static BotGuild toBotGuild(@Nullable Document document){
+        if(document == null)
+            return new BotGuild(0L, "", 0, GuildTier.UNKNOWN);
+        else
+            return new BotGuild(document.getLong("_id"), document.getString("prefix"), document.getInteger("timesUsed"), GuildTier.parse(document.getInteger("guildTier")));
+    }
+
+    public static Document fromBotGuild(BotGuild botGuild){
+        Document newDoc = new Document();
+        newDoc.put("_id", botGuild.getGuildId());
+        newDoc.put("prefix", botGuild.getPrefix());
+        newDoc.put("timesUsed", botGuild.getTimesUsed());
+        newDoc.put("guildTier", botGuild.getGuildTier().getLevel());
 
         return newDoc;
     }

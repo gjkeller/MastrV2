@@ -8,5 +8,17 @@
 
 package com.okgabe.mastr2.command;
 
-public class CommandReceiver {
+import com.okgabe.mastr2.Mastr;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+
+public class CommandHandler {
+    private Mastr mastr;
+
+    public CommandHandler(Mastr mastr) {
+        this.mastr = mastr;
+    }
+
+    public void handleMessage(MessageReceivedEvent e){
+
+    }
 }

@@ -38,26 +38,20 @@ public enum BotRole {
     }
 
     public static BotRole parse(String name){
-        switch(name.toLowerCase()){
-            case "default":
-                return DEFAULT;
-            case "bot staff":
-                return BOT_STAFF;
-            case "bot administrator":
-                return BOT_ADMINISTRATOR;
-            case "bot manager":
-                return BOT_MANAGER;
-            default:
-                return UNKNOWN;
+        String n = name.toLowerCase();
+        for(BotRole r : values()){
+            if(r.getName().toLowerCase().equals(n)) return r;
         }
+
+        return UNKNOWN;
     }
 
     public static BotRole parse(int level){
         for(BotRole r : values()){
-            if(r.level == level) return r;
+            if(r.getLevel() == level) return r;
         }
         
-        return null;
+        return UNKNOWN;
     }
 
     @Override

@@ -38,4 +38,30 @@ public class BotUser {
     public long getSuspensionLength() {
         return suspensionLength;
     }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public void setRole(BotRole role) {
+        this.role = role;
+    }
+
+    public void setTimesUsed(int timesUsed) {
+        this.timesUsed = timesUsed;
+    }
+
+    public void setSuspensionLength(long suspensionLength) {
+        this.suspensionLength = suspensionLength;
+    }
+
+    @Override
+    public String toString() {
+        return "BotUser{" +
+                "userId=" + userId +
+                ", role=" + role +
+                ", timesUsed=" + timesUsed +
+                ", suspensionLength=" + suspensionLength +
+                '}';
+    }
 }

@@ -6,23 +6,19 @@
  * https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.
  */
 
-package com.okgabe.mastr2.event;
+package com.okgabe.mastr2.dm;
 
 import com.okgabe.mastr2.Mastr;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-public class EventManager extends ListenerAdapter {
+public class DirectMessageHandler {
+    private Mastr mastr;
 
-    private Mastr bot;
-
-    public EventManager(Mastr bot) {
-        this.bot = bot;
+    public DirectMessageHandler(Mastr mastr) {
+        this.mastr = mastr;
     }
 
-    @Override
-    public void onMessageReceived(MessageReceivedEvent e){
-        // Ignore bots and Mastr itself
-        if(e.getAuthor().isBot()) return;
+    public void handleMessage(MessageReceivedEvent e){
+
     }
 }
