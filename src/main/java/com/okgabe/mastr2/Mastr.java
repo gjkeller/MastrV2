@@ -153,4 +153,8 @@ public class Mastr {
     public EventManager getEventManager() {
         return eventManager;
     }
+
+    public DatabaseManager getDatabaseManager() {
+        return databaseManager;
+    }
 }

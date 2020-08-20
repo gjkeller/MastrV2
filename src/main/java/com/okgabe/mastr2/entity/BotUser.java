@@ -14,13 +14,13 @@ public class BotUser {
     private long userId;
     private BotRole role;
     private int timesUsed;
-    private long suspensionLength;
+    private long suspensionEnd;
 
-    public BotUser(long userId, BotRole role, int timesUsed, long suspensionLength){
+    public BotUser(long userId, BotRole role, int timesUsed, long suspensionEnd){
         this.userId = userId;
         this.role = role;
         this.timesUsed = timesUsed;
-        this.suspensionLength = suspensionLength;
+        this.suspensionEnd = suspensionEnd;
     }
 
     public long getUserId() {
@@ -35,8 +35,8 @@ public class BotUser {
         return timesUsed;
     }
 
-    public long getSuspensionLength() {
-        return suspensionLength;
+    public long getSuspensionEnd() {
+        return suspensionEnd;
     }
 
     public void setUserId(long userId) {
@@ -51,8 +51,8 @@ public class BotUser {
         this.timesUsed = timesUsed;
     }
 
-    public void setSuspensionLength(long suspensionLength) {
-        this.suspensionLength = suspensionLength;
+    public void setSuspensionEnd(long suspensionEnd) {
+        this.suspensionEnd = suspensionEnd;
     }
 
     @Override
@@ -61,7 +61,7 @@ public class BotUser {
                 "userId=" + userId +
                 ", role=" + role +
                 ", timesUsed=" + timesUsed +
-                ", suspensionLength=" + suspensionLength +
+                ", suspensionEnd=" + suspensionEnd +
                 '}';
     }
 }

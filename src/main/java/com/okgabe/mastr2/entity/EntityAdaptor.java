@@ -19,7 +19,7 @@ public class EntityAdaptor {
             return new BotUser(0L, BotRole.UNKNOWN, 0, 0);
         else
             return new BotUser(document.getLong("_id"), BotRole.parse(document.getInteger("roleId")),
-                document.getInteger("timesUsed"), document.getInteger("suspensionLength"));
+                document.getInteger("timesUsed"), document.getInteger("suspensionEnd"));
     }
 
     public static Document fromBotUser(BotUser botUser){
@@ -27,7 +27,7 @@ public class EntityAdaptor {
         newDoc.put("_id", botUser.getUserId());
         newDoc.put("roleId", botUser.getRole().getLevel());
         newDoc.put("timesUsed", botUser.getTimesUsed());
-        newDoc.put("suspensionLength", botUser.getSuspensionLength());
+        newDoc.put("suspensionEnd", botUser.getSuspensionEnd());
 
         return newDoc;
     }

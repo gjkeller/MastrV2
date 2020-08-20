@@ -6,11 +6,10 @@
  * https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.
  */
 
-package com.okgabe.mastr2.permission;
+package com.okgabe.mastr2.util;
 
-import com.okgabe.mastr2.Mastr;
-
-public class BotRoleManager {
-    private Mastr mastr;
-
+public class TimeUtil {
+    public static long getNow(){
+        return System.currentTimeMillis() / 1000;
+    }
 }
