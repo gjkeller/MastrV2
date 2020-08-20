@@ -42,7 +42,7 @@ import java.util.List;
 public class Mastr extends ListenerAdapter {
 
     private static String VERSION;
-    private static Logger logger = LoggerFactory.getLogger(Mastr.class);
+    private static final Logger logger = LoggerFactory.getLogger(Mastr.class);
 
     private ShardManager shardManager;
     private EventManager eventManager;

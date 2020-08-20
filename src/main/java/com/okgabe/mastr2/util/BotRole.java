@@ -12,8 +12,8 @@ public enum BotRole {
     UNKNOWN("Unknown", -1), DEFAULT("Default", 5), BOT_STAFF("Bot Staff", 20),
     BOT_ADMINISTRATOR("Bot Administrator", 50), BOT_MANAGER("Bot Manager", 100), BOT_FOUNDER("Bot Founder", 127);
 
-    private String name;
-    private int level;
+    private final String name;
+    private final int level;
 
     BotRole(String name, int level) {
         this.name = name;

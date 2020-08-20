@@ -13,7 +13,7 @@ import com.okgabe.mastr2.util.GuildTier;
 import com.okgabe.mastr2.util.SuspensionCode;
 
 public class BotGuild {
-    private long guildId;
+    private final long guildId;
     private String prefix;
     private int timesUsed;
     private GuildTier guildTier;

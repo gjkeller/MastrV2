@@ -49,9 +49,6 @@ public class PermissionManager {
     }
 
     public boolean isBannedGuild(BotGuild guild){
-        if(guild.getSuspensionCode() == SuspensionCode.PERMANENT_SUSPENSION || guild.getSuspensionCode() == SuspensionCode.AUTOMATIC_SUSPENSION || guild.getSuspensionCode() == SuspensionCode.TEMPORARY_SUSPENSION){
-            return true;
-        }
-        else return false;
+        return guild.getSuspensionCode() == SuspensionCode.PERMANENT_SUSPENSION || guild.getSuspensionCode() == SuspensionCode.AUTOMATIC_SUSPENSION || guild.getSuspensionCode() == SuspensionCode.TEMPORARY_SUSPENSION;
     }
 }

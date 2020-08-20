@@ -12,8 +12,8 @@ public enum SuspensionCode {
     UNSUSPENDED("Unsuspended", 0), AUTOMATIC_SUSPENSION("Automatic Suspension", 10), TEMPORARY_SUSPENSION("Temporary Suspension", 20),
     PERMANENT_SUSPENSION("Permanent Suspension", 30);
 
-    private String name;
-    private int code;
+    private final String name;
+    private final int code;
 
     SuspensionCode(String name, int code) {
         this.name = name;

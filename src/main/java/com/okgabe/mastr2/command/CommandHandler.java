@@ -26,7 +26,7 @@ import java.util.List;
 
 public class CommandHandler {
 
-    private static Logger logger = LoggerFactory.getLogger(CommandHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(CommandHandler.class);
 
     private Mastr mastr;
     private String mastrId;

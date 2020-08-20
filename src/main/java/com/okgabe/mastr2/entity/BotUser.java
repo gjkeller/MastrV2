@@ -13,7 +13,7 @@ import com.okgabe.mastr2.util.BotRole;
 import com.okgabe.mastr2.util.SuspensionCode;
 
 public class BotUser {
-    private long userId;
+    private final long userId;
     private BotRole role;
     private int timesUsed;
     private SuspensionCode suspensionCode;
