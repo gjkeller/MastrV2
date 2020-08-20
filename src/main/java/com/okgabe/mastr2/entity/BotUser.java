@@ -28,11 +28,7 @@ public class BotUser {
     }
 
     public BotUser(long userId){
-        this.userId = userId;
-        this.role = BotRole.DEFAULT;
-        this.timesUsed = 0;
-        this.suspensionCode = SuspensionCode.UNSUSPENDED;
-        this.suspensionEnd = 0L;
+        this(userId, BotRole.DEFAULT, 0, SuspensionCode.UNSUSPENDED, 0L);
     }
 
     /**
@@ -63,6 +59,10 @@ public class BotUser {
 
     public void setTimesUsed(int timesUsed) {
         this.timesUsed = timesUsed;
+    }
+
+    public void incrementTimesUsed(){
+        timesUsed++;
     }
 
     public SuspensionCode getSuspensionCode() {

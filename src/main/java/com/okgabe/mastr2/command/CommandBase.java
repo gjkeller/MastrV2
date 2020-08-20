@@ -10,23 +10,21 @@ package com.okgabe.mastr2.command;
 
 import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.util.BotRole;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
 
 public abstract class CommandBase {
 
-    private Mastr mastr;
-    private String command;
-    private String description;
-    private String[] aliases;
-    private String[] syntax;
-    private BotRole minimumRole;
-    private boolean shownInHelp = true;
-    private CommandCategory category;
+    protected Mastr mastr;
 
     public CommandBase(Mastr mastr){
         this.mastr = mastr;
     }
 
-//    public abstract boolean called
+    public abstract boolean called(String[] args);
+
+    public abstract void execute(Member author, MessageChannel channel, Message message, String[] args);
 
     public abstract String getCommand();
 
@@ -46,6 +44,6 @@ public abstract class CommandBase {
     }
 
     public boolean isShownInHelp() {
-        return shownInHelp;
+        return true;
     }
 }

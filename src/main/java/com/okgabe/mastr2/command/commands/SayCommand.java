@@ -11,37 +11,42 @@ package com.okgabe.mastr2.command.commands;
 import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.command.CommandBase;
 import com.okgabe.mastr2.command.CommandCategory;
-import com.okgabe.mastr2.util.TimeUtil;
+import com.okgabe.mastr2.util.BotRole;
+import com.okgabe.mastr2.util.StringUtil;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 
-public class PingCommand extends CommandBase {
-    public PingCommand(Mastr mastr) {
+public class SayCommand extends CommandBase {
+
+    public SayCommand(Mastr mastr) {
         super(mastr);
     }
 
     @Override
     public boolean called(String[] args) {
-        return true;
+        return args.length > 0;
     }
 
     @Override
     public void execute(Member author, MessageChannel channel, Message message, String[] args) {
-        long before = TimeUtil.getNowMillis();
-        channel.sendMessage("Pong!").queue(m -> {
-            m.editMessage("Pong! `" + (TimeUtil.getNowMillis() - before) + "ms`").queue();
-        });
+        channel.sendMessage(StringUtil.join(args)).queue();
+        message.delete().queue();
+    }
+
+    @Override
+    public BotRole getMinimumRole() {
+        return BotRole.BOT_STAFF;
     }
 
     @Override
     public String getCommand() {
-        return "ping";
+        return "say";
     }
 
     @Override
     public String getDescription() {
-        return "Gets the current ping of the bot";
+        return "Forces the bot to say something";
     }
 
     @Override
@@ -51,6 +56,6 @@ public class PingCommand extends CommandBase {
 
     @Override
     public String[] getSyntax() {
-        return new String[] {""};
+        return new String[] {"<message>"};
     }
 }

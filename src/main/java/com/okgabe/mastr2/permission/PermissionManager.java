@@ -9,6 +9,7 @@
 package com.okgabe.mastr2.permission;
 
 import com.okgabe.mastr2.Mastr;
+import com.okgabe.mastr2.entity.BotGuild;
 import com.okgabe.mastr2.entity.BotUser;
 import com.okgabe.mastr2.util.SuspensionCode;
 import com.okgabe.mastr2.util.TimeUtil;
@@ -39,6 +40,17 @@ public class PermissionManager {
                 return false;
             }
             else return true;
+        }
+        else return false;
+    }
+
+    public boolean isBannedGuild(long id){
+        return isBannedGuild(mastr.getDatabaseManager().getBotGuild(id));
+    }
+
+    public boolean isBannedGuild(BotGuild guild){
+        if(guild.getSuspensionCode() == SuspensionCode.PERMANENT_SUSPENSION || guild.getSuspensionCode() == SuspensionCode.AUTOMATIC_SUSPENSION || guild.getSuspensionCode() == SuspensionCode.TEMPORARY_SUSPENSION){
+            return true;
         }
         else return false;
     }

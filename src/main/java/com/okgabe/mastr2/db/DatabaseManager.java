@@ -52,11 +52,20 @@ public class DatabaseManager {
     }
 
     public BotGuild getBotGuild(long id){
+        return getBotGuild(id, true);
+    }
+
+    public BotGuild getBotGuild(long id, boolean makeIfNotExist){
         Document search = new Document();
         search.put("_id", id);
 
         FindIterable<Document> guildIter = guilds.find(search);
         Document guild = guildIter.cursor().tryNext();
+
+        if(guild == null){
+            if(makeIfNotExist)  return createBotGuild(id);
+            else return null;
+        }
 
         return EntityAdaptor.toBotGuild(guild);
     }
@@ -65,14 +74,14 @@ public class DatabaseManager {
         Document oldUserSearch = new Document();
         oldUserSearch.put("_id", botUser.getUserId());
 
-        users.updateOne(oldUserSearch, EntityAdaptor.fromBotUser(botUser));
+        users.replaceOne(oldUserSearch, EntityAdaptor.fromBotUser(botUser));
     }
 
     public void setBotGuild(BotGuild botGuild){
         Document oldGuildSearch = new Document();
         oldGuildSearch.put("_id", botGuild.getGuildId());
 
-        users.updateOne(oldGuildSearch, EntityAdaptor.fromBotGuild(botGuild));
+        guilds.replaceOne(oldGuildSearch, EntityAdaptor.fromBotGuild(botGuild));
     }
 
     public BotUser createBotUser(long id){
@@ -82,14 +91,28 @@ public class DatabaseManager {
         return botUser;
     }
 
+    public BotGuild createBotGuild(long id){
+        BotGuild botGuild = new BotGuild(id);
+        guilds.insertOne(EntityAdaptor.fromBotGuild(botGuild));
+
+        return botGuild;
+    }
+
     public String getGuildPrefix(long id){
+        return getGuildPrefix(id, true);
+    }
+
+    public String getGuildPrefix(long id, boolean makeGuildIfNotExist){
         Document search = new Document();
         search.put("_id", id);
 
         FindIterable<Document> guildIter = guilds.find(search);
         Document guild = guildIter.cursor().tryNext();
 
-        if(guild==null) return null;
+        if(guild==null) {
+            if(makeGuildIfNotExist) return createBotGuild(id).getPrefix();
+            else return null;
+        }
         else return guild.getString("prefix");
     }
 }

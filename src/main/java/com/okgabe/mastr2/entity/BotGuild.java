@@ -27,6 +27,10 @@ public class BotGuild {
         this.suspensionCode = suspensionCode;
     }
 
+    public BotGuild(long guildId){
+        this(guildId, "mas ", 0, GuildTier.DEFAULT, SuspensionCode.UNSUSPENDED);
+    }
+
     /**
      * Updates the database to reflect the changes made to this object.
      * Should be called to save any changes made to the guild (tier, times used, etc.)
@@ -55,6 +59,10 @@ public class BotGuild {
 
     public void setTimesUsed(int timesUsed) {
         this.timesUsed = timesUsed;
+    }
+
+    public void incrementTimesUsed(){
+        timesUsed++;
     }
 
     public GuildTier getGuildTier() {

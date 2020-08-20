@@ -11,13 +11,12 @@ package com.okgabe.mastr2.command.commands;
 import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.command.CommandBase;
 import com.okgabe.mastr2.command.CommandCategory;
-import com.okgabe.mastr2.util.TimeUtil;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 
-public class PingCommand extends CommandBase {
-    public PingCommand(Mastr mastr) {
+public class ShardCommand extends CommandBase {
+    public ShardCommand(Mastr mastr) {
         super(mastr);
     }
 
@@ -28,20 +27,17 @@ public class PingCommand extends CommandBase {
 
     @Override
     public void execute(Member author, MessageChannel channel, Message message, String[] args) {
-        long before = TimeUtil.getNowMillis();
-        channel.sendMessage("Pong!").queue(m -> {
-            m.editMessage("Pong! `" + (TimeUtil.getNowMillis() - before) + "ms`").queue();
-        });
+        channel.sendMessage("You are on shard #" + author.getJDA().getShardInfo().getShardId() + " out of " + author.getJDA().getShardInfo().getShardTotal()).queue();
     }
 
     @Override
     public String getCommand() {
-        return "ping";
+        return "shard";
     }
 
     @Override
     public String getDescription() {
-        return "Gets the current ping of the bot";
+        return "Get what shard the bot is currently running on";
     }
 
     @Override
