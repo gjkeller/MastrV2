@@ -23,7 +23,7 @@
         // Default
     "bot mode": "default",
 
-    // Debug mode
+    // Logging mode
         // Options:
         // Trace (prints all messages)
         // Debug (print normal debug messages)

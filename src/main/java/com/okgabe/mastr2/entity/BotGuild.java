@@ -8,27 +8,37 @@
 
 package com.okgabe.mastr2.entity;
 
+import com.okgabe.mastr2.db.DatabaseManager;
 import com.okgabe.mastr2.util.GuildTier;
+import com.okgabe.mastr2.util.SuspensionCode;
 
 public class BotGuild {
     private long guildId;
     private String prefix;
     private int timesUsed;
     private GuildTier guildTier;
+    private SuspensionCode suspensionCode;
 
-    public BotGuild(long guildId, String prefix, int timesUsed, GuildTier guildTier) {
+    public BotGuild(long guildId, String prefix, int timesUsed, GuildTier guildTier, SuspensionCode suspensionCode) {
         this.guildId = guildId;
         this.prefix = prefix;
         this.timesUsed = timesUsed;
         this.guildTier = guildTier;
+        this.suspensionCode = suspensionCode;
+    }
+
+    /**
+     * Updates the database to reflect the changes made to this object.
+     * Should be called to save any changes made to the guild (tier, times used, etc.)
+     *
+     * @param db Mastr DatabaseManager
+     */
+    public void set(DatabaseManager db){
+        db.setBotGuild(this);
     }
 
     public long getGuildId() {
         return guildId;
-    }
-
-    public void setGuildId(long guildId) {
-        this.guildId = guildId;
     }
 
     public String getPrefix() {
@@ -55,6 +65,14 @@ public class BotGuild {
         this.guildTier = guildTier;
     }
 
+    public SuspensionCode getSuspensionCode() {
+        return suspensionCode;
+    }
+
+    public void setSuspensionCode(SuspensionCode suspensionCode) {
+        this.suspensionCode = suspensionCode;
+    }
+
     @Override
     public String toString() {
         return "BotGuild{" +
@@ -62,6 +80,7 @@ public class BotGuild {
                 ", prefix='" + prefix + '\'' +
                 ", timesUsed=" + timesUsed +
                 ", guildTier=" + guildTier +
+                ", suspensionCode=" + suspensionCode +
                 '}';
     }
 }

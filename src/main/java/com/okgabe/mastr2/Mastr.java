@@ -11,10 +11,17 @@ package com.okgabe.mastr2;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import com.mongodb.MongoException;
+import com.okgabe.mastr2.cache.CacheManager;
+import com.okgabe.mastr2.command.CommandHandler;
 import com.okgabe.mastr2.db.DatabaseManager;
+import com.okgabe.mastr2.dm.DirectMessageHandler;
 import com.okgabe.mastr2.event.EventManager;
+import com.okgabe.mastr2.permission.PermissionManager;
 import com.okgabe.mastr2.util.BotRole;
 import com.okgabe.mastr2.util.Checks;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import org.hjson.JsonObject;
@@ -32,13 +39,18 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-public class Mastr {
+public class Mastr extends ListenerAdapter {
 
     private static String VERSION;
     private static Logger logger = LoggerFactory.getLogger(Mastr.class);
+
     private ShardManager shardManager;
     private EventManager eventManager;
     private DatabaseManager databaseManager;
+    private PermissionManager permissionManager;
+    private DirectMessageHandler directMessageHandler;
+    private CommandHandler commandHandler;
+    private CacheManager cacheManager;
 
     public static void main(String[] args) {
         System.out.println("Starting up Mastr...");
@@ -112,7 +124,7 @@ public class Mastr {
     }
 
     private Mastr(String token, String dbConnectionString, BotRole botMode, Collection<String> managers){
-        logger.info("Logging into the database...");
+        logger.info("Connecting to database...");
         try{
             databaseManager = new DatabaseManager(dbConnectionString);
         }
@@ -122,15 +134,32 @@ public class Mastr {
             System.exit(-1);
         }
 
+        logger.info("Connection successful. Authentication will begin on the next transaction.");
         logger.info("Starting the bot...");
         try{
             DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(token);
             EventManager eventManager = new EventManager(this);
-            builder.addEventListeners(eventManager);
+            builder.addEventListeners(this, eventManager);
             shardManager = builder.build();
         }
         catch(LoginException ex){
             logger.error("Invalid token provided! Ensure you provide a valid bot token in the configuration file.");
+        }
+
+        cacheManager = new CacheManager(this);
+    }
+
+    @Override
+    public void onReady(ReadyEvent e){
+        JDA.ShardInfo shardInfo = e.getJDA().getShardInfo();
+        logger.info("Shard #" + shardInfo.getShardId() + "/" + shardInfo.getShardTotal() + " started.");
+        logger.info("Available guilds on this shard: " + e.getGuildAvailableCount() + "/" + e.getGuildTotalCount() + " (" + e.getGuildUnavailableCount() + " unavailable)");
+
+        // Load up bot on first shard's completion
+        if(shardInfo.getShardId()==0){
+            permissionManager = new PermissionManager(this);
+            directMessageHandler = new DirectMessageHandler(this);
+            commandHandler = new CommandHandler(this);
         }
     }
 
@@ -156,5 +185,21 @@ public class Mastr {
 
     public DatabaseManager getDatabaseManager() {
         return databaseManager;
+    }
+
+    public PermissionManager getPermissionManager() {
+        return permissionManager;
+    }
+
+    public DirectMessageHandler getDirectMessageHandler() {
+        return directMessageHandler;
+    }
+
+    public CommandHandler getCommandHandler() {
+        return commandHandler;
+    }
+
+    public CacheManager getCacheManager() {
+        return cacheManager;
     }
 }

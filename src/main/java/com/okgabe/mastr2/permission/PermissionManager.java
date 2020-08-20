@@ -9,6 +9,9 @@
 package com.okgabe.mastr2.permission;
 
 import com.okgabe.mastr2.Mastr;
+import com.okgabe.mastr2.entity.BotUser;
+import com.okgabe.mastr2.util.SuspensionCode;
+import com.okgabe.mastr2.util.TimeUtil;
 
 public class PermissionManager {
     private Mastr mastr;
@@ -17,16 +20,26 @@ public class PermissionManager {
         this.mastr = mastr;
     }
 
-//    public boolean isBannedUser(long id){
-//        return isBannedUser(mastr.getDatabaseManager().getBotUser(id));
-//    }
-//
-//    public boolean isBannedUser(BotUser user){
-//        if(user.getRole() == BotRole.PERMANENT_SUSPENSION){
-//            return false;
-//        }
-//        else if(user.getRole() == BotRole.AUTOMATICALLY_SUSPENDED || user.getRole() == BotRole.TEMPORARY_SUSPENSION){
-//
-//        }
-//    }
+    public boolean isBannedUser(long id){
+        return isBannedUser(mastr.getDatabaseManager().getBotUser(id));
+    }
+
+    public boolean isBannedUser(BotUser user){
+        if(user.getSuspensionCode() == SuspensionCode.PERMANENT_SUSPENSION){
+            return true;
+        }
+        else if(user.getSuspensionCode() == SuspensionCode.AUTOMATIC_SUSPENSION || user.getSuspensionCode() == SuspensionCode.TEMPORARY_SUSPENSION){
+            long now = TimeUtil.getNow();
+            long unsuspension = user.getSuspensionEnd();
+
+            if(now >= unsuspension){
+                user.setSuspensionCode(SuspensionCode.UNSUSPENDED);
+                user.setSuspensionEnd(0L);
+                user.set(mastr.getDatabaseManager());
+                return false;
+            }
+            else return true;
+        }
+        else return false;
+    }
 }

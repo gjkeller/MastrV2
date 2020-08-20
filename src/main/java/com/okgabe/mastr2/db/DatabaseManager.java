@@ -27,17 +27,26 @@ public class DatabaseManager {
 
     public DatabaseManager(String connectionString) throws MongoException  {
         client = MongoClients.create(connectionString);
+        client.startSession();
         mastrDatabase = client.getDatabase("mastr");
         users = mastrDatabase.getCollection("users");
         guilds = mastrDatabase.getCollection("guilds");
     }
 
     public BotUser getBotUser(long id){
+        return getBotUser(id, true);
+    }
+
+    public BotUser getBotUser(long id, boolean makeIfNotExist){
         Document search = new Document();
         search.put("_id", id);
 
         FindIterable<Document> userIter = users.find(search);
         Document user = userIter.cursor().tryNext();
+
+        if(makeIfNotExist && user == null){
+            return createBotUser(id);
+        }
 
         return EntityAdaptor.toBotUser(user);
     }
@@ -50,5 +59,37 @@ public class DatabaseManager {
         Document guild = guildIter.cursor().tryNext();
 
         return EntityAdaptor.toBotGuild(guild);
+    }
+
+    public void setBotUser(BotUser botUser){
+        Document oldUserSearch = new Document();
+        oldUserSearch.put("_id", botUser.getUserId());
+
+        users.updateOne(oldUserSearch, EntityAdaptor.fromBotUser(botUser));
+    }
+
+    public void setBotGuild(BotGuild botGuild){
+        Document oldGuildSearch = new Document();
+        oldGuildSearch.put("_id", botGuild.getGuildId());
+
+        users.updateOne(oldGuildSearch, EntityAdaptor.fromBotGuild(botGuild));
+    }
+
+    public BotUser createBotUser(long id){
+        BotUser botUser = new BotUser(id);
+        users.insertOne(EntityAdaptor.fromBotUser(botUser));
+
+        return botUser;
+    }
+
+    public String getGuildPrefix(long id){
+        Document search = new Document();
+        search.put("_id", id);
+
+        FindIterable<Document> guildIter = guilds.find(search);
+        Document guild = guildIter.cursor().tryNext();
+
+        if(guild==null) return null;
+        else return guild.getString("prefix");
     }
 }

@@ -10,8 +10,7 @@ package com.okgabe.mastr2.util;
 
 public enum GuildTier {
 
-    UNKNOWN("Unknown", -1), SUSPENDED_GUILD("Suspended Guild", 0), TEMPORARILY_SUSPENDED_GUILD("Temporarily Suspended Guild", 1),
-    AUTOMATICALLY_SUSPENDED_GUILD("Automatically Suspended Guild", 2), DEFAULT("Default Guild", 5), PREMIUM_GUILD("Premium Guild", 20),
+    UNKNOWN("Unknown", -1), DEFAULT("Default Guild", 5), PREMIUM_GUILD("Premium Guild", 20),
     VIP_GUILD("VIP Guild", 50), OFFICIAL_GUILD("Official Guild", 100);
 
     private int level;
