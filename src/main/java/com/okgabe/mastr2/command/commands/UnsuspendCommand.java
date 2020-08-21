@@ -13,50 +13,66 @@ import com.okgabe.mastr2.command.CommandBase;
 import com.okgabe.mastr2.command.CommandCategory;
 import com.okgabe.mastr2.entity.BotUser;
 import com.okgabe.mastr2.util.BotRole;
-import com.okgabe.mastr2.util.StringUtil;
+import com.okgabe.mastr2.util.Checks;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 
-public class SayCommand extends CommandBase {
-
-    public SayCommand(Mastr mastr) {
+public class UnsuspendCommand extends CommandBase {
+    public UnsuspendCommand(Mastr mastr) {
         super(mastr);
     }
 
     @Override
     public boolean called(String[] args) {
-        return args.length > 0;
+        return args.length == 1;
     }
 
     @Override
     public void execute(Member author, BotUser user, MessageChannel channel, Message message, String[] args) {
-        message.delete().queue();
-        channel.sendMessage(StringUtil.join(args)).queue();
+        if(!Checks.isId(args[0])){
+            channel.sendMessage("❌ Please provide a valid user ID to suspend").queue();
+            return;
+        }
+
+        long id = Long.parseLong(args[0]);
+        BotUser target = mastr.getDatabaseManager().getBotUser(id);
+        if(!user.getRole().isAtOrAbove(target.getRole())){
+            channel.sendMessage("❌ You don't have permission to interact with this individual").queue();
+            return;
+        }
+
+        boolean result = mastr.getPermissionManager().unsuspend(target);
+        if(result){
+            channel.sendMessage("✅ That individual has been unsuspended").queue();
+        }
+        else{
+            channel.sendMessage("❌ That individual was not suspended").queue();
+        }
     }
 
     @Override
     public BotRole getMinimumRole() {
-        return BotRole.BOT_STAFF;
+        return BotRole.BOT_ADMINISTRATOR;
     }
 
     @Override
     public String getCommand() {
-        return "say";
+        return "unsuspend";
     }
 
     @Override
     public String getDescription() {
-        return "Forces the bot to say something";
+        return "Unsuspends the given user";
     }
 
     @Override
     public CommandCategory getCategory() {
-        return CommandCategory.MASTR;
+        return CommandCategory.MASTR_ADMIN;
     }
 
     @Override
     public String[] getSyntax() {
-        return new String[] {"<message>"};
+        return new String[] {"<userid>"};
     }
 }

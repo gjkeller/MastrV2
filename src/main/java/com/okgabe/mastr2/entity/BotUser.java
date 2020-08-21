@@ -19,26 +19,16 @@ public class BotUser {
     private SuspensionCode suspensionCode;
     private long suspensionEnd;
 
-    public BotUser(long userId, BotRole role, int timesUsed, SuspensionCode suspensionCode, long suspensionEnd){
+    public BotUser(long userId){
+        this(userId, BotRole.DEFAULT, 0, SuspensionCode.UNSUSPENDED, 0L);
+    }
+
+    public BotUser(long userId, BotRole role, int timesUsed, SuspensionCode suspensionCode, long suspensionEnd) {
         this.userId = userId;
         this.role = role;
         this.timesUsed = timesUsed;
         this.suspensionCode = suspensionCode;
         this.suspensionEnd = suspensionEnd;
-    }
-
-    public BotUser(long userId){
-        this(userId, BotRole.DEFAULT, 0, SuspensionCode.UNSUSPENDED, 0L);
-    }
-
-    /**
-     * Updates the database to reflect the changes made to this object.
-     * Should be called to save any changes made to the user (role, times used, etc.)
-     *
-     * @param db Mastr DatabaseManager
-     */
-    public void set(DatabaseManager db){
-        db.setBotUser(this);
     }
 
     public long getUserId() {
@@ -61,10 +51,6 @@ public class BotUser {
         this.timesUsed = timesUsed;
     }
 
-    public void incrementTimesUsed(){
-        timesUsed++;
-    }
-
     public SuspensionCode getSuspensionCode() {
         return suspensionCode;
     }
@@ -81,14 +67,18 @@ public class BotUser {
         this.suspensionEnd = suspensionEnd;
     }
 
-    @Override
-    public String toString() {
-        return "BotUser{" +
-                "userId=" + userId +
-                ", role=" + role +
-                ", timesUsed=" + timesUsed +
-                ", suspensionCode=" + suspensionCode +
-                ", suspensionEnd=" + suspensionEnd +
-                '}';
+    /**
+     * Updates the database to reflect the changes made to this object.
+     * Should be called to save any changes made to the user (role, times used, etc.)
+     *
+     * @param db Mastr DatabaseManager
+     */
+    public void set(DatabaseManager db){
+        db.setBotUser(this);
     }
+
+    public void incrementTimesUsed(){
+        timesUsed++;
+    }
+
 }

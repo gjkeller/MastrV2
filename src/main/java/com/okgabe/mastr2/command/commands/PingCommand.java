@@ -11,6 +11,7 @@ package com.okgabe.mastr2.command.commands;
 import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.command.CommandBase;
 import com.okgabe.mastr2.command.CommandCategory;
+import com.okgabe.mastr2.entity.BotUser;
 import com.okgabe.mastr2.util.TimeUtil;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -27,7 +28,7 @@ public class PingCommand extends CommandBase {
     }
 
     @Override
-    public void execute(Member author, MessageChannel channel, Message message, String[] args) {
+    public void execute(Member author, BotUser user, MessageChannel channel, Message message, String[] args) {
         long before = TimeUtil.getNowMillis();
         channel.sendMessage("Pong!").queue(m -> {
             m.editMessage("Pong! `" + (TimeUtil.getNowMillis() - before) + "ms`").queue();

@@ -20,6 +20,14 @@ public enum SuspensionCode {
         this.code = code;
     }
 
+    public boolean isAtOrAbove(SuspensionCode code){
+        return this.code >= code.getCode();
+    }
+
+    public boolean isAbove(SuspensionCode code){
+        return this.code > code.getCode();
+    }
+
     public static SuspensionCode parse(String name){
         String n = name.toLowerCase();
         for(SuspensionCode suscode : values()){

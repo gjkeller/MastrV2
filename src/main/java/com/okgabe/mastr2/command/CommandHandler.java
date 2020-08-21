@@ -86,26 +86,26 @@ public class CommandHandler {
      *
      * @param e Message event
      */
-    public void handleMessage(MessageReceivedEvent e){
+    public void handleMessage(MessageReceivedEvent e, BotUser user, BotGuild guild){
         String content = e.getMessage().getContentRaw();
         String prefix = retrievePrefix(e.getGuild().getIdLong());
 
         if(content.startsWith(prefix)){
-            parseCommand(e.getMember(), e.getTextChannel(), e.getMessage(), prefix);
+            parseCommand(e.getMember(), e.getTextChannel(), e.getMessage(), prefix, user, guild);
         }
         else if(content.startsWith("<@" + mastrId + ">")){
             if(content.trim().length() <= 21){
                 e.getChannel().sendMessage("Hey! My prefix for this server is `" + prefix + "`. If you need help, you can use `" + prefix + "help` or DM me!" +
                         "\nIf you don't like remembering bot prefixes, mentioning me works as a command prefix as well.").queue();
             }
-            else parseCommand(e.getMember(), e.getTextChannel(), e.getMessage(), "<@" + mastrId + "> ");
+            else parseCommand(e.getMember(), e.getTextChannel(), e.getMessage(), "<@" + mastrId + "> ", user, guild);
         }
         else if(content.startsWith("<@!" + mastrId + ">")){
             if(content.trim().length() <= 22){
                 e.getChannel().sendMessage("Hey! My prefix for this server is `" + prefix + "`. If you need help, you can use `" + prefix + "help` or DM me!" +
                         "\nIf you don't like remembering bot prefixes, mentioning me works as a command prefix as well.").queue();
             }
-            else parseCommand(e.getMember(), e.getTextChannel(), e.getMessage(), "<@!" + mastrId + "> ");
+            else parseCommand(e.getMember(), e.getTextChannel(), e.getMessage(), "<@!" + mastrId + "> ", user, guild);
         }
     }
 
@@ -117,7 +117,7 @@ public class CommandHandler {
      * @param message Message containing the command
      * @param prefix Prefix used to execute the command
      */
-    public void parseCommand(Member author, MessageChannel channel, Message message, String prefix){
+    public void parseCommand(Member author, MessageChannel channel, Message message, String prefix, BotUser user, BotGuild guild){
         // Get information about the command
         String content = message.getContentRaw();
         String contentNoPrefix = content.substring(prefix.length());
@@ -132,18 +132,12 @@ public class CommandHandler {
             args[i-1] = argsWithCommand[i];
         }
 
-        executeCommand(cmd, author, channel, message, args);
+        executeCommand(cmd, author, channel, message, args, user, guild);
     }
 
-    public void executeCommand(CommandBase cmd, Member author, MessageChannel channel, Message message, String[] args)  {
+    public void executeCommand(CommandBase cmd, Member author, MessageChannel channel, Message message, String[] args, BotUser user, BotGuild guild)  {
         logger.debug("Command " + cmd.getCommand() + " received from user " + author.getUser().getName() + " (" + author.getUser().getId() + ") in guild " + author.getGuild().getName() + " (" + author.getGuild().getId() + ")");
         try{
-            BotUser user = mastr.getDatabaseManager().getBotUser(author.getIdLong());
-            BotGuild guild = mastr.getDatabaseManager().getBotGuild(author.getGuild().getIdLong());
-
-            if(mastr.getPermissionManager().isBannedUser(user)) return;
-            if(mastr.getPermissionManager().isBannedGuild(guild)) return;
-
             if(!user.getRole().isAtOrAbove(cmd.getMinimumRole())){
                 channel.sendMessage("❌ You must be a `" + cmd.getMinimumRole().getName() + "` or above to run this command.").queue();
                 return;
@@ -156,7 +150,7 @@ public class CommandHandler {
                 guild.incrementTimesUsed();
                 guild.set(mastr.getDatabaseManager());
 
-                cmd.execute(author, channel, message, args);
+                cmd.execute(author, user, channel, message, args);
             }
             else{
                 channel.sendMessage("❌ Wrong command usage.").queue();

@@ -12,4 +12,9 @@ public class Checks {
     public static boolean isNullString(String s){
         return s == null || s.trim().equals("") || s.equalsIgnoreCase("null");
     }
+
+    public static boolean isId(String s){
+        if(s.length()!=18 || !StringUtil.isNumeric(s)) return false;
+        return true;
+    }
 }

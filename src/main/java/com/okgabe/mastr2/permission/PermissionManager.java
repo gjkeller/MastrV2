@@ -51,4 +51,71 @@ public class PermissionManager {
     public boolean isBannedGuild(BotGuild guild){
         return guild.getSuspensionCode() == SuspensionCode.PERMANENT_SUSPENSION || guild.getSuspensionCode() == SuspensionCode.AUTOMATIC_SUSPENSION || guild.getSuspensionCode() == SuspensionCode.TEMPORARY_SUSPENSION;
     }
+
+    public boolean suspend(long id, SuspensionCode code, long suspensionEnd){
+        return suspend(mastr.getDatabaseManager().getBotUser(id), code, suspensionEnd);
+    }
+
+    /**
+     * Permanently suspends the given user
+     *
+     * @param id User ID
+     * @return True if successful, false if already suspended
+     */
+    public boolean suspend(long id){
+        return suspend(mastr.getDatabaseManager().getBotUser(id), SuspensionCode.PERMANENT_SUSPENSION, 0);
+    }
+
+    /**
+     * Permanently suspends the given user
+     *
+     * @param user User
+     * @return True if successful, false if already suspended
+     */
+    public boolean suspend(BotUser user){
+        return suspend(user, SuspensionCode.PERMANENT_SUSPENSION, 0);
+    }
+
+    /**
+     * Suspends the given user, will override temporary suspensions
+     *
+     * @param user User
+     * @param code Suspension code
+     * @param suspensionEnd Time in which the suspension ends
+     * @return True if successful, false if already suspended
+     * @throws IllegalArgumentException If code is SuspensionCode.UNSUSPENDED - utilize {@link PermissionManager#unsuspend} instead
+     */
+    public boolean suspend(BotUser user, SuspensionCode code, long suspensionEnd) throws IllegalArgumentException {
+        if(code == SuspensionCode.UNSUSPENDED) throw new IllegalArgumentException("Provided SuspensionCode.UNSUSPENDED: use PermissionManager#unsuspend instead of this operation!");
+        if(user.getSuspensionCode() == SuspensionCode.PERMANENT_SUSPENSION) return false;
+
+        user.setSuspensionCode(code);
+        user.setSuspensionEnd(suspensionEnd);
+        user.set(mastr.getDatabaseManager());
+        return true;
+    }
+
+    /**
+     * Unsuspends the given user.
+     *
+     * @param id User ID
+     * @return True if successful, false if not suspended
+     */
+    public boolean unsuspend(long id){
+        return unsuspend(mastr.getDatabaseManager().getBotUser(id));
+    }
+
+    /**
+     * Unsuspends the given user.
+     *
+     * @param user User
+     * @return True if successful, false if not suspended
+     */
+    public boolean unsuspend(BotUser user){
+        if(!isBannedUser(user)) return false;
+        user.setSuspensionEnd(0L);
+        user.setSuspensionCode(SuspensionCode.UNSUSPENDED);
+        user.set(mastr.getDatabaseManager());
+        return true;
+    }
 }

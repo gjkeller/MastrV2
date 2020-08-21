@@ -9,6 +9,7 @@
 package com.okgabe.mastr2.command;
 
 import com.okgabe.mastr2.Mastr;
+import com.okgabe.mastr2.entity.BotUser;
 import com.okgabe.mastr2.util.BotRole;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -24,7 +25,7 @@ public abstract class CommandBase {
 
     public abstract boolean called(String[] args);
 
-    public abstract void execute(Member author, MessageChannel channel, Message message, String[] args);
+    public abstract void execute(Member author, BotUser user, MessageChannel channel, Message message, String[] args);
 
     public abstract String getCommand();
 
@@ -38,7 +39,6 @@ public abstract class CommandBase {
         return new String[] {};
     }
 
-
     public BotRole getMinimumRole() {
         return BotRole.DEFAULT;
     }
@@ -46,4 +46,6 @@ public abstract class CommandBase {
     public boolean isShownInHelp() {
         return true;
     }
+
+    public String[] getExamples() { return new String[] {}; }
 }

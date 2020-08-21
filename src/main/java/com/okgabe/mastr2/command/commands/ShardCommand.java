@@ -11,6 +11,7 @@ package com.okgabe.mastr2.command.commands;
 import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.command.CommandBase;
 import com.okgabe.mastr2.command.CommandCategory;
+import com.okgabe.mastr2.entity.BotUser;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -26,7 +27,7 @@ public class ShardCommand extends CommandBase {
     }
 
     @Override
-    public void execute(Member author, MessageChannel channel, Message message, String[] args) {
+    public void execute(Member author, BotUser user, MessageChannel channel, Message message, String[] args) {
         channel.sendMessage("You are on shard #" + author.getJDA().getShardInfo().getShardId() + " out of " + author.getJDA().getShardInfo().getShardTotal()).queue();
     }
 

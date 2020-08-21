@@ -9,6 +9,7 @@
 package com.okgabe.mastr2.dm;
 
 import com.okgabe.mastr2.Mastr;
+import com.okgabe.mastr2.entity.BotUser;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class DirectMessageHandler {
@@ -18,7 +19,7 @@ public class DirectMessageHandler {
         this.mastr = mastr;
     }
 
-    public void handleMessage(MessageReceivedEvent e){
+    public void handleMessage(MessageReceivedEvent e, BotUser user){
 
     }
 }

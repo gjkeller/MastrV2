@@ -30,4 +30,18 @@ public class StringUtil {
 
         return sb.substring(0, sb.length()-combiner.length());
     }
+
+    // From commons-lang StringUtils
+    public static boolean isNumeric(String str) {
+        if (str == null) {
+            return false;
+        }
+        int sz = str.length();
+        for (int i = 0; i < sz; i++) {
+            if (!Character.isDigit(str.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
