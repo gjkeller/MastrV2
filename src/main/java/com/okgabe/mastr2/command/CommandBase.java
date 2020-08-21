@@ -9,23 +9,28 @@
 package com.okgabe.mastr2.command;
 
 import com.okgabe.mastr2.Mastr;
+import com.okgabe.mastr2.entity.BotGuild;
 import com.okgabe.mastr2.entity.BotUser;
 import com.okgabe.mastr2.util.BotRole;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class CommandBase {
 
     protected Mastr mastr;
+    protected Logger logger;
 
     public CommandBase(Mastr mastr){
         this.mastr = mastr;
+        this.logger = LoggerFactory.getLogger(this.getClass());
     }
 
     public abstract boolean called(String[] args);
 
-    public abstract void execute(Member author, BotUser user, MessageChannel channel, Message message, String[] args);
+    public abstract void execute(Member author, BotGuild guild, BotUser user, MessageChannel channel, Message message, String[] args);
 
     public abstract String getCommand();
 

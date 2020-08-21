@@ -11,6 +11,7 @@ package com.okgabe.mastr2.command.commands;
 import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.command.CommandBase;
 import com.okgabe.mastr2.command.CommandCategory;
+import com.okgabe.mastr2.entity.BotGuild;
 import com.okgabe.mastr2.entity.BotUser;
 import com.okgabe.mastr2.util.BotRole;
 import com.okgabe.mastr2.util.StringUtil;
@@ -30,7 +31,7 @@ public class SayCommand extends CommandBase {
     }
 
     @Override
-    public void execute(Member author, BotUser user, MessageChannel channel, Message message, String[] args) {
+    public void execute(Member author, BotGuild guild, BotUser user, MessageChannel channel, Message message, String[] args) {
         message.delete().queue();
         channel.sendMessage(StringUtil.join(args)).queue();
     }

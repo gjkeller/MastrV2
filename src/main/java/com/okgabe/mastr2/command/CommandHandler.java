@@ -32,7 +32,6 @@ public class CommandHandler {
     private String mastrId;
     private List<CommandBase> commands;
 
-
     /**
      * Initializes the CommandHandler and registers all commands located in the commands package
      *
@@ -90,7 +89,10 @@ public class CommandHandler {
         String content = e.getMessage().getContentRaw();
         String prefix = retrievePrefix(e.getGuild().getIdLong());
 
-        if(content.startsWith(prefix)){
+        if(content.startsWith(prefix + " ")){
+            parseCommand(e.getMember(), e.getTextChannel(), e.getMessage(), prefix + " ", user, guild);
+        }
+        else if(content.startsWith(prefix)){
             parseCommand(e.getMember(), e.getTextChannel(), e.getMessage(), prefix, user, guild);
         }
         else if(content.startsWith("<@" + mastrId + ">")){
@@ -109,6 +111,9 @@ public class CommandHandler {
         }
     }
 
+    //  |
+    //  |
+    //  \/
     /**
      * Handles parsing of incoming commands triggered with the Mastr alias
      *
@@ -135,6 +140,20 @@ public class CommandHandler {
         executeCommand(cmd, author, channel, message, args, user, guild);
     }
 
+    //  |
+    //  |
+    //  \/
+    /**
+     * Executes the given command.
+     *
+     * @param cmd Command to be executed
+     * @param author Member author of the command
+     * @param channel Channel the command was executed in
+     * @param message Message containing the command
+     * @param args Arguments of the command
+     * @param user BotUser of the command
+     * @param guild BotGuild the command was ran in
+     */
     public void executeCommand(CommandBase cmd, Member author, MessageChannel channel, Message message, String[] args, BotUser user, BotGuild guild)  {
         logger.debug("Command " + cmd.getCommand() + " received from user " + author.getUser().getName() + " (" + author.getUser().getId() + ") in guild " + author.getGuild().getName() + " (" + author.getGuild().getId() + ")");
         try{
@@ -150,7 +169,7 @@ public class CommandHandler {
                 guild.incrementTimesUsed();
                 guild.set(mastr.getDatabaseManager());
 
-                cmd.execute(author, user, channel, message, args);
+                cmd.execute(author, guild, user, channel, message, args);
             }
             else{
                 channel.sendMessage("❌ Wrong command usage.").queue();

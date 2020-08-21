@@ -28,7 +28,7 @@ public class BotGuild {
     }
 
     public BotGuild(long guildId){
-        this(guildId, "mas ", 0, GuildTier.DEFAULT, SuspensionCode.UNSUSPENDED);
+        this(guildId, "mas", 0, GuildTier.DEFAULT, SuspensionCode.UNSUSPENDED);
     }
 
     /**

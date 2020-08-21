@@ -37,7 +37,7 @@ public class EventManager extends ListenerAdapter {
         else{
             BotGuild guild = mastr.getDatabaseManager().getBotGuild(e.getGuild().getIdLong());
             if(mastr.getPermissionManager().isBannedGuild(guild)) return;
-            //cache
+            // add message caching here
 
             if(mastr.getPermissionManager().isBannedUser(user)) return;
             mastr.getCommandHandler().handleMessage(e, user, guild);
