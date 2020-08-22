@@ -13,12 +13,14 @@ import ch.qos.logback.classic.LoggerContext;
 import com.mongodb.MongoException;
 import com.okgabe.mastr2.cache.CacheManager;
 import com.okgabe.mastr2.command.CommandHandler;
+import com.okgabe.mastr2.command.ResponseHandler;
 import com.okgabe.mastr2.db.DatabaseManager;
 import com.okgabe.mastr2.dm.DirectMessageHandler;
 import com.okgabe.mastr2.event.EventManager;
 import com.okgabe.mastr2.permission.PermissionManager;
 import com.okgabe.mastr2.util.BotRole;
 import com.okgabe.mastr2.util.Checks;
+import com.okgabe.mastr2.util.MastrThreadFactory;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -38,6 +40,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class Mastr extends ListenerAdapter {
 
@@ -51,6 +55,8 @@ public class Mastr extends ListenerAdapter {
     private DirectMessageHandler directMessageHandler;
     private CommandHandler commandHandler;
     private CacheManager cacheManager;
+    private ResponseHandler responseHandler;
+    private ScheduledExecutorService scheduler;
 
     public static void main(String[] args) {
         System.out.println("Starting up Mastr...");
@@ -146,7 +152,9 @@ public class Mastr extends ListenerAdapter {
             logger.error("Invalid token provided! Ensure you provide a valid bot token in the configuration file.");
         }
 
+        scheduler = Executors.newScheduledThreadPool(2, new MastrThreadFactory("Mastr-Scheduler"));
         cacheManager = new CacheManager(this);
+        responseHandler = new ResponseHandler(this);
     }
 
     @Override
@@ -201,5 +209,13 @@ public class Mastr extends ListenerAdapter {
 
     public CacheManager getCacheManager() {
         return cacheManager;
+    }
+
+    public ResponseHandler getResponseHandler() {
+        return responseHandler;
+    }
+
+    public ScheduledExecutorService getScheduler() {
+        return scheduler;
     }
 }

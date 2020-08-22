@@ -29,17 +29,28 @@ public class EventManager extends ListenerAdapter {
         if(e.getAuthor().isBot()) return;
         if(e.isWebhookMessage()) return;
 
-        BotUser user = mastr.getDatabaseManager().getBotUser(e.getAuthor().getIdLong());
-
         if(e.isFromType(ChannelType.PRIVATE)){
+            // Check if user is suspended, if so, return
+            BotUser user = mastr.getDatabaseManager().getBotUser(e.getAuthor().getIdLong());
+            if(mastr.getPermissionManager().isBannedUser(user)) return;
+
+            // Pass on the user's message to DM Handler
             mastr.getDirectMessageHandler().handleMessage(e, user);
         }
         else{
+            // Check if guild is suspended, if so, return
             BotGuild guild = mastr.getDatabaseManager().getBotGuild(e.getGuild().getIdLong());
             if(mastr.getPermissionManager().isBannedGuild(guild)) return;
-            // add message caching here
+            // TODO: Add message caching here
 
+            // Check if user is suspended, if so, return
+            BotUser user = mastr.getDatabaseManager().getBotUser(e.getAuthor().getIdLong());
             if(mastr.getPermissionManager().isBannedUser(user)) return;
+
+            // Check if ResponseHandler is listening for this user's message, if so, return
+            if(mastr.getResponseHandler().handleMessage(e.getMessage())) return;
+
+            // Check if user issued a command
             mastr.getCommandHandler().handleMessage(e, user, guild);
         }
     }

@@ -44,4 +44,40 @@ public class StringUtil {
         }
         return true;
     }
+
+    public static int positionInAlphabet(char c){
+        c = Character.toLowerCase(c);
+        if(c > 122) return -1;
+        if(c < 97) return -1;
+        return c - 97;
+    }
+
+    public static char numberToAlphabet(int n){
+        return (char)(97+(n%25));
+    }
+    
+    public static String numberToString(int i){
+        switch(i){
+            case 1:
+                return  "one";
+            case 2:
+                return  "two";
+            case 3:
+                return  "three";
+            case 4:
+                return  "four";
+            case 5:
+                return  "five";
+            case 6:
+                return  "six";
+            case 7:
+                return  "seven";
+            case 8:
+                return  "eight";
+            case 9:
+                return "nine";
+            default:
+                return  "zero";
+        }
+    }
 }

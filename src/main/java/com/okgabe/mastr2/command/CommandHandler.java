@@ -45,6 +45,7 @@ public class CommandHandler {
         logger.info("Registering commands...");
         try{
             for(Class c : ReflectionUtil.getClasses("com.okgabe.mastr2.command.commands")){
+                if(c.isAnonymousClass()||c.isMemberClass()) continue;
                 commands.add((CommandBase)c.getConstructors()[0].newInstance(mastr));
             }
         }
@@ -76,6 +77,7 @@ public class CommandHandler {
             logger.error(StringUtil.join(duplicateCommands.toArray(new String[duplicateCommands.size()])), ", ");
         }
         else logger.info("Overlap check complete");
+        logger.info("CommandHandler loaded");
     }
 
     /**
