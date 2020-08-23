@@ -89,10 +89,10 @@ public class MinesweeperCommand extends CommandBase {
         String minesweeperString = minesweeperToString(minesweeper);
 
         channel.sendMessage(minesweeperString).queue(m1 -> {
-            channel.sendMessage("You have started a game of Minesweeper! Here are some commands you can use:\n" +
+            channel.sendMessage(author.getAsMention() + ", you have started a game of Minesweeper! Here are some commands you can use:\n" +
                     "flag <tile>, reveal, end").queue(m2 -> {
 
-                MinesweeperResponseListener responseListener = new MinesweeperResponseListener(channel.getType(), channel.getIdLong(), user.getUserId(), 5*60, ident -> {
+                MinesweeperResponseListener responseListener = new MinesweeperResponseListener(channel.getType(), channel.getIdLong(), user.getUserId(), 10*60, ident -> {
                     MinesweeperResponseListener identity = (MinesweeperResponseListener)ident;
                     String content = ident.getMessage().getContentRaw().toLowerCase();
                     if(content.startsWith("f")){

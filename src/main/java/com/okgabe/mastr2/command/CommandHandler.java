@@ -53,7 +53,7 @@ public class CommandHandler {
             logger.error("Failed to load commands:");
             ex.printStackTrace();
         }
-        logger.info("Commands registered");
+        logger.info("Registered " + commands.size() + " commands");
         logger.info("Scanning for overlapping command aliases...");
 
         // Scan through commands to see if there are any duplicate aliases
