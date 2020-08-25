@@ -84,9 +84,9 @@ public class MinesweeperCommand extends CommandBase {
 
     @Override
     public void execute(Member author, BotGuild guild, BotUser user, MessageChannel channel, Message message, String[] args) {
-        String[][] minesweeper = generateMinesweeper(9, 9, 10, bombEmote.getAsMention());
-        String[][] copy = copy(minesweeper);
-        String minesweeperString = minesweeperToString(minesweeper);
+        String[][] minesweeperOriginal = generateMinesweeper(9, 9, 10, bombEmote.getAsMention());
+        String[][] minesweeperCopy = copy(minesweeperOriginal);
+        String minesweeperString = minesweeperToString(minesweeperOriginal);
 
         channel.sendMessage(minesweeperString).queue(m1 -> {
             channel.sendMessage(author.getAsMention() + ", you have started a game of Minesweeper! Here are some commands you can use:\n" +
@@ -96,7 +96,7 @@ public class MinesweeperCommand extends CommandBase {
                     MinesweeperResponseListener identity = (MinesweeperResponseListener)ident;
                     String content = ident.getMessage().getContentRaw().toLowerCase();
                     if(content.startsWith("f")){
-                        if(!content.contains(" ")) return;
+                        if(!content.contains(" ")) return; // false message / no flag set
 
                         ident.getMessage().delete().queue();
                         identity.setFailedAttempt(false);
@@ -123,21 +123,21 @@ public class MinesweeperCommand extends CommandBase {
                             return;
                         }
 
-                        String tile = copy[row][col];
-                        if(tile.equals(flagEmote.getAsMention())){
-                            tile = minesweeper[row][col];
+                        String tile = minesweeperCopy[row][col];
+                        if(tile.equals(flag)){
+                            tile = minesweeperOriginal[row][col];
                         }
                         else{
                             tile = flagEmote.getAsMention();
                         }
-                        copy[row][col] = tile;
+                        minesweeperCopy[row][col] = tile;
 
-                        m1.editMessage(minesweeperToString(copy)).queue();
+                        m1.editMessage(minesweeperToString(minesweeperCopy)).queue();
                         m2.editMessage("Set tile " + firstChar + secondChar + " to a flag!").queue();
                     }
                     else if(content.startsWith("r")){
                         ident.getMessage().delete().queue();
-                        m1.editMessage(minesweeperString.replaceAll("\\|\\|", "")).queue();
+                        m1.editMessage(minesweeperString.replaceAll("\\|\\|", "")).queue(); // Remove all spoilers
                         m2.editMessage("Revealed! Your game is over.").queue();
                         mastr.getResponseHandler().unregister(identity);
                     }
@@ -211,36 +211,8 @@ public class MinesweeperCommand extends CommandBase {
         // Convert to disc message
         StringBuilder message = new StringBuilder();
         for(int x = 0; x < field.length; x++){
-            String s = "";
-            switch(x+1){
-                case 1:
-                    s = oneEmote.getAsMention();
-                    break;
-                case 2:
-                    s = twoEmote.getAsMention();
-                    break;
-                case 3:
-                    s = threeEmote.getAsMention();
-                    break;
-                case 4:
-                    s = fourEmote.getAsMention();
-                    break;
-                case 5:
-                    s = fiveEmote.getAsMention();
-                    break;
-                case 6:
-                    s = sixEmote.getAsMention();
-                    break;
-                case 7:
-                    s = sevenEmote.getAsMention();
-                    break;
-                case 8:
-                    s = eightEmote.getAsMention();
-                    break;
-                case 9:
-                    s = nineEmote.getAsMention();
-            }
-            message.append(s).append(" ");
+            message.append(numberToEmoji(x+1)).append(" ");
+
             for(int y = 0; y < field[x].length; y++){
                 if(field[x][y].equals(flag))
                     message.append(field[x][y]).append(" ");
@@ -254,37 +226,7 @@ public class MinesweeperCommand extends CommandBase {
         StringBuilder topRow = new StringBuilder();
         topRow.append(blankTile.getAsMention()).append(" ");
         for(int i = 0; i < field[0].length; i++){
-            String s = String.valueOf(StringUtil.numberToAlphabet(i));
-            switch(s){
-                case "a":
-                    s = aEmote.getAsMention();
-                    break;
-                case "b":
-                    s = bEmote.getAsMention();
-                    break;
-                case "c":
-                    s = cEmote.getAsMention();
-                    break;
-                case "d":
-                    s = dEmote.getAsMention();
-                    break;
-                case "e":
-                    s = eEmote.getAsMention();
-                    break;
-                case "f":
-                    s = fEmote.getAsMention();
-                    break;
-                case "g":
-                    s = gEmote.getAsMention();
-                    break;
-                case "h":
-                    s = hEmote.getAsMention();
-                    break;
-                case "i":
-                    s = iEmote.getAsMention();
-                    break;
-            }
-            topRow.append(s).append(" ");
+            topRow.append(letterToEmoji(StringUtil.numberToAlphabet(i))).append(" ");
         }
         msw = topRow.toString() + "\n" + msw;
 
@@ -360,11 +302,59 @@ public class MinesweeperCommand extends CommandBase {
         String[][] copy = new String[array.length][array[0].length];
 
         for(int i = 0; i < array.length; i++){
-            for(int x = 0; x < array[i].length; x++){
-                copy[i][x] = array[i][x];
-            }
+            System.arraycopy(array[i], 0, copy[i], 0, array[i].length);
         }
 
         return copy;
+    }
+
+    private String numberToEmoji(int x){
+        switch(x){
+            case 1:
+                return oneEmote.getAsMention();
+            case 2:
+                return twoEmote.getAsMention();
+            case 3:
+                return threeEmote.getAsMention();
+            case 4:
+                return fourEmote.getAsMention();
+            case 5:
+                return fiveEmote.getAsMention();
+            case 6:
+                return sixEmote.getAsMention();
+            case 7:
+                return sevenEmote.getAsMention();
+            case 8:
+                return eightEmote.getAsMention();
+            case 9:
+                return nineEmote.getAsMention();
+            default:
+                return null;
+        }
+    }
+
+    private String letterToEmoji(char c){
+        switch(c){
+            case 'a':
+                return aEmote.getAsMention();
+            case 'b':
+                return bEmote.getAsMention();
+            case 'c':
+                return cEmote.getAsMention();
+            case 'd':
+                return dEmote.getAsMention();
+            case 'e':
+                return eEmote.getAsMention();
+            case 'f':
+                return fEmote.getAsMention();
+            case 'g':
+                return gEmote.getAsMention();
+            case 'h':
+                return hEmote.getAsMention();
+            case 'i':
+                return iEmote.getAsMention();
+            default:
+                return null;
+        }
     }
 }
