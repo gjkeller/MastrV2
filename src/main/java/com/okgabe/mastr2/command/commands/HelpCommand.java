@@ -12,28 +12,25 @@ import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.command.CommandBase;
 import com.okgabe.mastr2.command.CommandCategory;
 import com.okgabe.mastr2.command.CommandEvent;
-import com.okgabe.mastr2.util.BotRole;
-import com.okgabe.mastr2.util.StringUtil;
 
-public class SayCommand extends CommandBase {
-
-    public SayCommand(Mastr mastr) {
+public class HelpCommand extends CommandBase {
+    public HelpCommand(Mastr mastr) {
         super(mastr);
-        this.command = "say";
-        this.description = "Forces the bot to say something";
-        this.category = CommandCategory.MASTR_ADMIN;
-        this.syntax = new String[] {"<message>"};
-        this.minimumRole = BotRole.BOT_ADMINISTRATOR;
+        this.command = "help";
+        this.aliases = new String[] {"h", "command", "cmd"};
+        this.description = "Describes how to use Mastr and its commands";
+        this.category = CommandCategory.MASTR;
+        this.syntax = new String[] {"[page]", "[command]"};
+        this.examples = new String[] {"help 4", "help kick"};
     }
 
     @Override
     public boolean called(CommandEvent e) {
-        return e.getArgs().length > 0;
+        return true;
     }
 
     @Override
     public void execute(CommandEvent e) {
-        e.getMessage().delete().queue();
-        e.getChannel().sendMessage(StringUtil.join(e.getArgs())).queue();
+
     }
 }

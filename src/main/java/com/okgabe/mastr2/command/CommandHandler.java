@@ -164,14 +164,15 @@ public class CommandHandler {
                 return;
             }
 
-            boolean properCall = cmd.called(args);
+            CommandEvent e = new CommandEvent(author, guild, user, channel, message, args);
+            boolean properCall = cmd.called(e);
             if(properCall){
                 user.incrementTimesUsed();
                 user.set(mastr.getDatabaseManager());
                 guild.incrementTimesUsed();
                 guild.set(mastr.getDatabaseManager());
 
-                cmd.execute(author, guild, user, channel, message, args);
+                cmd.execute(e);
             }
             else{
                 channel.sendMessage("❌ Wrong command usage.").queue();

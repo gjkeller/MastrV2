@@ -11,69 +11,46 @@ package com.okgabe.mastr2.command.commands;
 import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.command.CommandBase;
 import com.okgabe.mastr2.command.CommandCategory;
-import com.okgabe.mastr2.entity.BotGuild;
+import com.okgabe.mastr2.command.CommandEvent;
 import com.okgabe.mastr2.entity.BotUser;
 import com.okgabe.mastr2.util.BotRole;
 import com.okgabe.mastr2.util.Checks;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
 
 public class UnsuspendCommand extends CommandBase {
     public UnsuspendCommand(Mastr mastr) {
         super(mastr);
+        this.command = "unsuspend";
+        this.description = "Unsuspends the given user";
+        this.syntax = new String[] {"<userid>"};
+        this.minimumRole = BotRole.BOT_ADMINISTRATOR;
+        this.category = CommandCategory.MASTR_ADMIN;
     }
 
     @Override
-    public boolean called(String[] args) {
-        return args.length == 1;
+    public boolean called(CommandEvent e) {
+        return e.getArgs().length == 1;
     }
 
     @Override
-    public void execute(Member author, BotGuild guild, BotUser user, MessageChannel channel, Message message, String[] args) {
-        if(!Checks.isId(args[0])){
-            channel.sendMessage("❌ Please provide a valid user ID to suspend").queue();
+    public void execute(CommandEvent e) {
+        if(!Checks.isId(e.getArgs()[0])){
+            e.getChannel().sendMessage("❌ Please provide a valid user ID to suspend").queue();
             return;
         }
 
-        long id = Long.parseLong(args[0]);
+        long id = Long.parseLong(e.getArgs()[0]);
         BotUser target = mastr.getDatabaseManager().getBotUser(id);
-        if(!user.getRole().isAtOrAbove(target.getRole())){
-            channel.sendMessage("❌ You don't have permission to interact with this individual").queue();
+        if(!e.getBotUser().getRole().isAtOrAbove(target.getRole())){
+            e.getChannel().sendMessage("❌ You don't have permission to interact with this individual").queue();
             return;
         }
 
         boolean result = mastr.getPermissionManager().unsuspend(target);
         if(result){
-            channel.sendMessage("✅ That individual has been unsuspended").queue();
+            e.getChannel().sendMessage("✅ That individual has been unsuspended").queue();
         }
         else{
-            channel.sendMessage("❌ That individual was not suspended").queue();
+            e.getChannel().sendMessage("❌ That individual was not suspended").queue();
         }
-    }
-
-    @Override
-    public BotRole getMinimumRole() {
-        return BotRole.BOT_ADMINISTRATOR;
-    }
-
-    @Override
-    public String getCommand() {
-        return "unsuspend";
-    }
-
-    @Override
-    public String getDescription() {
-        return "Unsuspends the given user";
-    }
-
-    @Override
-    public CommandCategory getCategory() {
-        return CommandCategory.MASTR_ADMIN;
-    }
-
-    @Override
-    public String[] getSyntax() {
-        return new String[] {"<userid>"};
     }
 }

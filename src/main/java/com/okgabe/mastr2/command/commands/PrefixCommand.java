@@ -11,12 +11,8 @@ package com.okgabe.mastr2.command.commands;
 import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.command.CommandBase;
 import com.okgabe.mastr2.command.CommandCategory;
-import com.okgabe.mastr2.entity.BotGuild;
-import com.okgabe.mastr2.entity.BotUser;
+import com.okgabe.mastr2.command.CommandEvent;
 import com.okgabe.mastr2.util.StringUtil;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
 
 public class PrefixCommand extends CommandBase {
 
@@ -24,33 +20,37 @@ public class PrefixCommand extends CommandBase {
 
     public PrefixCommand(Mastr mastr) {
         super(mastr);
+        this.command = "prefix";
+        this.description = "Change the bot's prefix for this server";
+        this.syntax = new String[] {"<prefix>"};
+        this.category = CommandCategory.MASTR;
     }
 
     @Override
-    public boolean called(String[] args) {
+    public boolean called(CommandEvent e) {
         return true;
     }
 
     @Override
-    public void execute(Member author, BotGuild guild, BotUser user, MessageChannel channel, Message message, String[] args) {
-        if(args.length == 0){
-            channel.sendMessage("This server's prefix is `" + guild.getPrefix() + "`").queue();
+    public void execute(CommandEvent e) {
+        if(e.getArgs().length == 0){
+            e.getChannel().sendMessage("This server's prefix is `" + e.getBotGuild().getPrefix() + "`").queue();
             return;
         }
-        else if(args.length>2){
-            channel.sendMessage("❌ Your prefix must not have more than one space").queue();
+        else if(e.getArgs().length>2){
+            e.getChannel().sendMessage("❌ Your prefix must not have more than one space").queue();
             return;
         }
 
-        String prefix = StringUtil.join(args);
+        String prefix = StringUtil.join(e.getArgs());
 
-        if(guild.getPrefix().equals(prefix)){
-            channel.sendMessage("❌ This server's prefix is already `" + prefix + "`").queue();
+        if(e.getBotGuild().getPrefix().equals(prefix)){
+            e.getChannel().sendMessage("❌ This server's prefix is already `" + prefix + "`").queue();
             return;
         }
 
         if(prefix.length()>20){
-            channel.sendMessage("❌ Your prefix cannot be longer than 20 characters").queue();
+            e.getChannel().sendMessage("❌ Your prefix cannot be longer than 20 characters").queue();
             return;
         }
 
@@ -64,34 +64,14 @@ public class PrefixCommand extends CommandBase {
             }
 
             if(!isWhitelistedChar){
-                channel.sendMessage("❌ That message contains a blacklisted character: " + prefixChar).queue();
+                e.getChannel().sendMessage("❌ That message contains a blacklisted character: " + prefixChar).queue();
                 return;
             }
         }
 
-        guild.setPrefix(prefix);
-        guild.set(mastr.getDatabaseManager());
-        mastr.getCacheManager().setPrefix(guild.getGuildId(), prefix);
-        channel.sendMessage("✅ This server's prefix has been changed to `" + prefix + "`").queue();
-    }
-
-    @Override
-    public String getCommand() {
-        return "prefix";
-    }
-
-    @Override
-    public String getDescription() {
-        return "Change the bot's prefix for this server";
-    }
-
-    @Override
-    public CommandCategory getCategory() {
-        return CommandCategory.MASTR;
-    }
-
-    @Override
-    public String[] getSyntax() {
-        return new String[] {"<prefix>"};
+        e.getBotGuild().setPrefix(prefix);
+        e.getBotGuild().set(mastr.getDatabaseManager());
+        mastr.getCacheManager().setPrefix(e.getBotGuild().getGuildId(), prefix);
+        e.getChannel().sendMessage("✅ This server's prefix has been changed to `" + prefix + "`").queue();
     }
 }

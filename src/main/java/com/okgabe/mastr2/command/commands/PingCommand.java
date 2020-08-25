@@ -11,12 +11,8 @@ package com.okgabe.mastr2.command.commands;
 import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.command.CommandBase;
 import com.okgabe.mastr2.command.CommandCategory;
-import com.okgabe.mastr2.entity.BotGuild;
-import com.okgabe.mastr2.entity.BotUser;
+import com.okgabe.mastr2.command.CommandEvent;
 import com.okgabe.mastr2.util.TimeUtil;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
 
 public class PingCommand extends CommandBase {
 
@@ -24,43 +20,24 @@ public class PingCommand extends CommandBase {
 
     public PingCommand(Mastr mastr) {
         super(mastr);
+
+        this.command = "ping";
+        this.description = "Gets the ping of the bot's connection";
+        this.category = CommandCategory.MASTR;
+        this.syntax = new String[] {""};
+        this.aliases = new String[] {"hey", "hi", "hello"};
     }
 
     @Override
-    public boolean called(String[] args) {
+    public boolean called(CommandEvent e) {
         return true;
     }
 
     @Override
-    public void execute(Member author, BotGuild guild, BotUser user, MessageChannel channel, Message message, String[] args) {
+    public void execute(CommandEvent e) {
         long before = TimeUtil.getNowMillis();
-        channel.sendMessage(responses[(int)(Math.random()*responses.length)] + " \uD83D\uDC93 `" + author.getJDA().getGatewayPing() + "`ms").queue(m -> {
+        e.getChannel().sendMessage(responses[(int)(Math.random()*responses.length)] + " \uD83D\uDC93 `" + e.getJDA().getGatewayPing() + "`ms").queue(m -> {
             m.editMessage( m.getContentRaw() + "  /  ↔️ `" + (TimeUtil.getNowMillis() - before) + "`ms").queue();
         });
-    }
-
-    @Override
-    public String getCommand() {
-        return "ping";
-    }
-
-    @Override
-    public String getDescription() {
-        return "Gets the ping of the bot's connection";
-    }
-
-    @Override
-    public CommandCategory getCategory() {
-        return CommandCategory.MASTR;
-    }
-
-    @Override
-    public String[] getSyntax() {
-        return new String[] {""};
-    }
-
-    @Override
-    public String[] getAliases() {
-        return new String[] {"hey", "hi", "hello"};
     }
 }

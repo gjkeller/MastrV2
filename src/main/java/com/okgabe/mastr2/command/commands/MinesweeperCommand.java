@@ -11,15 +11,20 @@ package com.okgabe.mastr2.command.commands;
 import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.command.CommandBase;
 import com.okgabe.mastr2.command.CommandCategory;
+import com.okgabe.mastr2.command.CommandEvent;
 import com.okgabe.mastr2.command.ResponseListenerIdentity;
-import com.okgabe.mastr2.entity.BotGuild;
-import com.okgabe.mastr2.entity.BotUser;
 import com.okgabe.mastr2.util.StringUtil;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.Emote;
 
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 public class MinesweeperCommand extends CommandBase {
+    
+    private static final int COLUMNS = 9;
+    private static final int ROWS = 9;
+    
     private Emote bombEmote;
     private Emote flagEmote;
     private Emote oneEmote;
@@ -49,6 +54,12 @@ public class MinesweeperCommand extends CommandBase {
 
     public MinesweeperCommand(Mastr mastr) {
         super(mastr);
+        this.command = "minesweeper";
+        this.description = "Gives you a playable game of Minesweeper!";
+        this.aliases = new String[] {"msw"};
+        this.category = CommandCategory.FUN;
+        this.syntax = new String[] {""};
+        
         bombEmote = mastr.getShardManager().getEmoteById(746599421764173944L);
         flagEmote = mastr.getShardManager().getEmoteById(746601049854574694L);
         oneEmote = mastr.getShardManager().getEmoteById(746642432728236092L);
@@ -78,25 +89,25 @@ public class MinesweeperCommand extends CommandBase {
     }
 
     @Override
-    public boolean called(String[] args) {
+    public boolean called(CommandEvent e) {
         return true;
     }
 
     @Override
-    public void execute(Member author, BotGuild guild, BotUser user, MessageChannel channel, Message message, String[] args) {
-        String[][] minesweeperOriginal = generateMinesweeper(9, 9, 10, bombEmote.getAsMention());
+    public void execute(CommandEvent e) {
+        String[][] minesweeperOriginal = generateMinesweeper(10);
         String[][] minesweeperCopy = copy(minesweeperOriginal);
         String minesweeperString = minesweeperToString(minesweeperOriginal);
 
-        channel.sendMessage(minesweeperString).queue(m1 -> {
-            channel.sendMessage(author.getAsMention() + ", you have started a game of Minesweeper! Here are some commands you can use:\n" +
+        e.getChannel().sendMessage(minesweeperString).queue(m1 -> {
+            e.getChannel().sendMessage(e.getAuthor().getAsMention() + ", you have started a game of Minesweeper! Here are some commands you can use:\n" +
                     "flag <tile>, reveal, end").queue(m2 -> {
 
-                MinesweeperResponseListener responseListener = new MinesweeperResponseListener(channel.getType(), channel.getIdLong(), user.getUserId(), 10*60, ident -> {
-                    MinesweeperResponseListener identity = (MinesweeperResponseListener)ident;
+                MinesweeperResponseListener responseListener = new MinesweeperResponseListener(e.getChannel().getType(), e.getChannel().getIdLong(), e.getBotUser().getUserId(), 10 * 60, ident -> {
+                    MinesweeperResponseListener identity = (MinesweeperResponseListener) ident;
                     String content = ident.getMessage().getContentRaw().toLowerCase();
-                    if(content.startsWith("f")){
-                        if(!content.contains(" ")) return; // false message / no flag set
+                    if (content.startsWith("f")) {
+                        if (!content.contains(" ")) return; // false message / no flag set
 
                         ident.getMessage().delete().queue();
                         identity.setFailedAttempt(false);
@@ -106,66 +117,57 @@ public class MinesweeperCommand extends CommandBase {
                         int row;
                         int col;
 
-                        try{
-                            if(StringUtil.isNumeric(String.valueOf(firstChar))){
-                                row = Integer.parseInt(String.valueOf(firstChar))-1;
+                        try {
+                            if (StringUtil.isNumeric(String.valueOf(firstChar))) {
+                                row = Integer.parseInt(String.valueOf(firstChar)) - 1;
                                 col = StringUtil.positionInAlphabet(secondChar);
-                                if(col == -1) throw new Exception();
-                            }
-                            else{
-                                row = Integer.parseInt(String.valueOf(secondChar))-1;
+                                if (col == -1) throw new Exception();
+                            } else {
+                                row = Integer.parseInt(String.valueOf(secondChar)) - 1;
                                 col = StringUtil.positionInAlphabet(firstChar);
-                                if(col == -1) throw new Exception();
+                                if (col == -1) throw new Exception();
                             }
-                        }
-                        catch(Exception ignored){
+                        } catch (Exception ignored) {
                             m2.editMessage("You provided an invalid tile!").queue();
                             return;
                         }
 
                         String tile = minesweeperCopy[row][col];
-                        if(tile.equals(flag)){
+                        if (tile.equals(flag)) {
                             tile = minesweeperOriginal[row][col];
-                        }
-                        else{
+                        } else {
                             tile = flagEmote.getAsMention();
                         }
                         minesweeperCopy[row][col] = tile;
 
                         m1.editMessage(minesweeperToString(minesweeperCopy)).queue();
                         m2.editMessage("Set tile " + firstChar + secondChar + " to a flag!").queue();
-                    }
-                    else if(content.startsWith("r")){
+                    } else if (content.startsWith("r")) {
                         ident.getMessage().delete().queue();
                         m1.editMessage(minesweeperString.replaceAll("\\|\\|", "")).queue(); // Remove all spoilers
                         m2.editMessage("Revealed! Your game is over.").queue();
                         mastr.getResponseHandler().unregister(identity);
-                    }
-                    else if(content.startsWith("e")){
+                    } else if (content.startsWith("e")) {
                         ident.getMessage().delete().queue();
                         m2.editMessage("Ending your game of Minesweeper.").queue();
                         mastr.getResponseHandler().unregister(ident);
-                    }
-                    else{
-                        if(identity.isFailedAttempt()){
+                    } else {
+                        if (identity.isFailedAttempt()) {
                             m2.editMessage("Ending your game of Minesweeper.").queue();
                             mastr.getResponseHandler().unregister(identity);
-                        }
-                        else{
+                        } else {
                             m2.editMessage("I couldn't understand that. You can say flag, reveal, or end.").queue();
                             identity.setFailedAttempt(true);
                         }
                     }
-                }, expiration -> {
-                    m2.editMessage("Your game of Minesweeper has expired.").queue();
-                });
+                }, expiration -> m2.editMessage("Your game of Minesweeper has expired.").queue());
 
                 mastr.getResponseHandler().register(responseListener);
             });
         });
     }
 
-    public class MinesweeperResponseListener extends ResponseListenerIdentity {
+    public static class MinesweeperResponseListener extends ResponseListenerIdentity {
 
         private boolean failedAttempt = false;
 
@@ -180,31 +182,6 @@ public class MinesweeperCommand extends CommandBase {
         public void setFailedAttempt(boolean failedAttempt) {
             this.failedAttempt = failedAttempt;
         }
-    }
-
-    @Override
-    public String getCommand() {
-        return "minesweeper";
-    }
-
-    @Override
-    public String getDescription() {
-        return "Gives you a playable game of Minesweeper!";
-    }
-
-    @Override
-    public CommandCategory getCategory() {
-        return CommandCategory.FUN;
-    }
-
-    @Override
-    public String[] getSyntax() {
-        return new String[] {};
-    }
-
-    @Override
-    public String[] getAliases() {
-        return new String[] {"msw"};
     }
 
     public String minesweeperToString(String[][] field){
@@ -233,14 +210,12 @@ public class MinesweeperCommand extends CommandBase {
         return msw;
     }
 
-    public String[][] generateMinesweeper(int rows, int columns, int mines, String bomb){
-        String[][] field = new String[rows][columns];
+    public String[][] generateMinesweeper(int mines){
+        String[][] field = new String[ROWS][COLUMNS];
 
         // Fill with zeroes
-        for(int x = 0; x < rows; x++){
-            for(int y = 0; y < field[x].length; y++){
-                field[x][y] = ":zero:";
-            }
+        for(int x = 0; x < ROWS; x++){
+            Arrays.fill(field[x], ":zero:");
         }
 
         // Randomly add mines
@@ -261,9 +236,9 @@ public class MinesweeperCommand extends CommandBase {
                 if(field[x][y].equals(bomb)) continue;
                 int totalBombs = 0;
                 boolean hasLeft = y > 0;
-                boolean hasRight = y < (columns-1);
+                boolean hasRight = y < (COLUMNS-1);
                 boolean hasTop = x > 0;
-                boolean hasBottom = x < (rows-1);
+                boolean hasBottom = x < (ROWS-1);
 
                 //left
                 totalBombs += (hasLeft && field[x][y-1].equals(bomb) ? 1 : 0);

@@ -11,44 +11,24 @@ package com.okgabe.mastr2.command.commands;
 import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.command.CommandBase;
 import com.okgabe.mastr2.command.CommandCategory;
-import com.okgabe.mastr2.entity.BotGuild;
-import com.okgabe.mastr2.entity.BotUser;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
+import com.okgabe.mastr2.command.CommandEvent;
 
 public class ShardCommand extends CommandBase {
     public ShardCommand(Mastr mastr) {
         super(mastr);
+        this.command = "shard";
+        this.description = "Get what shard the bot is currently running on";
+        this.category = CommandCategory.MASTR;
+        this.syntax = new String[] {""};
     }
 
     @Override
-    public boolean called(String[] args) {
+    public boolean called(CommandEvent e) {
         return true;
     }
 
     @Override
-    public void execute(Member author, BotGuild guild, BotUser user, MessageChannel channel, Message message, String[] args) {
-        channel.sendMessage("You are on shard #" + author.getJDA().getShardInfo().getShardId() + " out of " + author.getJDA().getShardInfo().getShardTotal()).queue();
-    }
-
-    @Override
-    public String getCommand() {
-        return "shard";
-    }
-
-    @Override
-    public String getDescription() {
-        return "Get what shard the bot is currently running on";
-    }
-
-    @Override
-    public CommandCategory getCategory() {
-        return CommandCategory.MASTR;
-    }
-
-    @Override
-    public String[] getSyntax() {
-        return new String[] {""};
+    public void execute(CommandEvent e) {
+        e.getChannel().sendMessage("You are on shard #" + e.getJDA().getShardInfo().getShardId() + " out of " + e.getJDA().getShardInfo().getShardTotal()).queue();
     }
 }
