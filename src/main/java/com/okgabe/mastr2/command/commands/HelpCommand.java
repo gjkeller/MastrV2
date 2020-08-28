@@ -167,8 +167,6 @@ public class HelpCommand extends CommandBase {
             List<CommandBase> cmds = commands.stream()
                     .filter(cmd -> cmd.getCategory() == category)
                     .collect(Collectors.toList());
-            logger.debug(category.toString());
-            logger.debug(cmds.size() + "");
             if(cmds.size()==0) {
                 categories.remove(category);
                 i = i-1;
