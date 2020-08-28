@@ -14,9 +14,11 @@ import com.mongodb.MongoException;
 import com.okgabe.mastr2.cache.CacheManager;
 import com.okgabe.mastr2.command.CommandHandler;
 import com.okgabe.mastr2.command.ResponseHandler;
+import com.okgabe.mastr2.command.commands.HelpCommand;
 import com.okgabe.mastr2.db.DatabaseManager;
 import com.okgabe.mastr2.dm.DirectMessageHandler;
 import com.okgabe.mastr2.event.EventManager;
+import com.okgabe.mastr2.event.ReactionHandler;
 import com.okgabe.mastr2.permission.PermissionManager;
 import com.okgabe.mastr2.util.BotRole;
 import com.okgabe.mastr2.util.Checks;
@@ -56,6 +58,7 @@ public class Mastr extends ListenerAdapter {
     private CommandHandler commandHandler;
     private CacheManager cacheManager;
     private ResponseHandler responseHandler;
+    private ReactionHandler reactionHandler;
     private ScheduledExecutorService scheduler;
 
     public static void main(String[] args) {
@@ -144,7 +147,7 @@ public class Mastr extends ListenerAdapter {
         logger.info("Starting the bot...");
         try{
             DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(token);
-            EventManager eventManager = new EventManager(this);
+            eventManager = new EventManager(this);
             builder.addEventListeners(this, eventManager);
             shardManager = builder.build();
         }
@@ -155,6 +158,7 @@ public class Mastr extends ListenerAdapter {
         scheduler = Executors.newScheduledThreadPool(2, new MastrThreadFactory("Mastr-Scheduler"));
         cacheManager = new CacheManager(this);
         responseHandler = new ResponseHandler(this);
+        reactionHandler = new ReactionHandler(this);
     }
 
     @Override
@@ -168,6 +172,11 @@ public class Mastr extends ListenerAdapter {
             permissionManager = new PermissionManager(this);
             directMessageHandler = new DirectMessageHandler(this);
             commandHandler = new CommandHandler(this);
+
+            logger.debug("Building help command...");
+            HelpCommand helpCmd = commandHandler.getCommand(HelpCommand.class);
+            helpCmd.buildCommandPages();
+            logger.debug("Completed help page building");
         }
     }
 
@@ -217,5 +226,9 @@ public class Mastr extends ListenerAdapter {
 
     public ScheduledExecutorService getScheduler() {
         return scheduler;
+    }
+
+    public ReactionHandler getReactionHandler() {
+        return reactionHandler;
     }
 }

@@ -11,62 +11,40 @@ package com.okgabe.mastr2.command.commands;
 import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.command.CommandBase;
 import com.okgabe.mastr2.command.CommandCategory;
-import com.okgabe.mastr2.entity.BotGuild;
-import com.okgabe.mastr2.entity.BotUser;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
+import com.okgabe.mastr2.command.CommandEvent;
 
 public class BubbleWrapCommand extends CommandBase {
+    private static final String BUBBLES = "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| \n" +
+            "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP||\n" +
+            "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| \n" +
+            "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP||\n" +
+            "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| \n" +
+            "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP||\n" +
+            "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| \n" +
+            "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP||\n" +
+            "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP||\n" +
+            "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP||\n" +
+            "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP||\n" +
+            "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP||";
+
     public BubbleWrapCommand(Mastr mastr) {
         super(mastr);
+        this.command = "bubblewrap";
+        this.description = "Sends bubble wrap for your pleasure";
+        this.category = CommandCategory.FUN;
+        this.syntax = new String[] {""};
+        this.aliases = new String[] {"bubbles"};
     }
 
     @Override
-    public boolean called(String[] args) {
+    public boolean called(CommandEvent e) {
         return true;
     }
 
     // This is a dumb command.
     // I'm sorry.
     @Override
-    public void execute(Member author, BotGuild guild, BotUser user, MessageChannel channel, Message message, String[] args) {
-        channel.sendMessage("||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| \n" +
-                "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP||\n" +
-                "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| \n" +
-                "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP||\n" +
-                "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| \n" +
-                "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP||\n" +
-                "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| \n" +
-                "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP||\n" +
-                "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP||\n" +
-                "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP||\n" +
-                "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP||\n" +
-                "||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP|| ||POP||").queue();
-    }
-
-    @Override
-    public String getCommand() {
-        return "bubblewrap";
-    }
-
-    @Override
-    public String getDescription() {
-        return "Sends bubble wrap for your pleasure";
-    }
-
-    @Override
-    public CommandCategory getCategory() {
-        return CommandCategory.FUN;
-    }
-
-    @Override
-    public String[] getSyntax() {
-        return new String[] {};
-    }
-
-    @Override
-    public String[] getAliases() {
-        return new String[] {"bubbles"};
+    public void execute(CommandEvent e) {
+        e.getChannel().sendMessage(BUBBLES).queue();
     }
 }

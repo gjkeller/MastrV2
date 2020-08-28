@@ -13,6 +13,7 @@ import com.okgabe.mastr2.entity.BotGuild;
 import com.okgabe.mastr2.entity.BotUser;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class EventManager extends ListenerAdapter {
@@ -53,5 +54,10 @@ public class EventManager extends ListenerAdapter {
             // Check if user issued a command
             mastr.getCommandHandler().handleMessage(e, user, guild);
         }
+    }
+
+    @Override
+    public void onMessageReactionAdd(MessageReactionAddEvent e){
+        mastr.getReactionHandler().handleReaction(e.getReaction(), e.getMessageIdLong(), e.getChannelType(), e.getUser());
     }
 }

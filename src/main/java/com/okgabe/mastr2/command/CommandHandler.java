@@ -54,7 +54,7 @@ public class CommandHandler {
             ex.printStackTrace();
         }
         logger.info("Registered " + commands.size() + " commands");
-        logger.info("Scanning for overlapping command aliases...");
+        logger.debug("Scanning for overlapping command aliases...");
 
         // Scan through commands to see if there are any duplicate aliases
         List<String> commandAliases = new ArrayList<>();
@@ -74,9 +74,10 @@ public class CommandHandler {
 
         if(duplicateCommands.size() > 0){
             logger.error("There are duplicate command aliases!");
-            logger.error(StringUtil.join(duplicateCommands.toArray(new String[duplicateCommands.size()])), ", ");
+            logger.error(StringUtil.join(duplicateCommands.toArray(new String[0])), ", ");
         }
-        else logger.info("Overlap check complete");
+        else logger.debug("Overlap check complete");
+
         logger.info("CommandHandler loaded");
     }
 
@@ -221,5 +222,32 @@ public class CommandHandler {
         String prefix = mastr.getDatabaseManager().getGuildPrefix(guildId);
         mastr.getCacheManager().setPrefix(guildId, prefix);
         return prefix;
+    }
+
+    public <T extends CommandBase> T getCommand(Class<T> clazz){
+        for(CommandBase cmd : commands){
+            if(cmd.getClass() == clazz) return clazz.cast(cmd);
+        }
+
+        return null;
+    }
+
+    public List<CommandBase> getCommands() {
+        return commands;
+    }
+
+    public CommandBase getCommand(String name){
+        name = name.toLowerCase();
+
+        for(CommandBase cmd : commands){
+            for(int i = -1; i < cmd.getAliases().length; i++){
+                // Loop through command and all aliases in command
+                String alias = (i == -1 ? cmd.getCommand() : cmd.getAliases()[i]);
+
+                if(name.equals(alias.toLowerCase())) return cmd;
+            }
+        }
+
+        return null;
     }
 }
