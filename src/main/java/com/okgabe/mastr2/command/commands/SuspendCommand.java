@@ -25,7 +25,7 @@ public class SuspendCommand extends CommandBase {
         this.command = "suspend";
         this.description = "Suspends an individual from using the Mastr";
         this.category = CommandCategory.MASTR_ADMIN;
-        this.syntax = new String[] {"<userid> - Permanent suspension", "<userid> <time> - Temporary Suspension"};
+        this.syntax = new String[] {"<userid> - Permanent suspension", "<userid> <time> - Temporary suspension"};
         this.minimumRole = BotRole.BOT_ADMINISTRATOR;
     }
 

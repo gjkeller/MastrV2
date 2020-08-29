@@ -26,8 +26,9 @@ import java.util.stream.Collectors;
 
 public class HelpCommand extends CommandBase {
 
-    private List<MessageEmbed> helpPages = new ArrayList<>();
-    private List<MessageEmbed> adminHelpPages = new ArrayList<>();
+    private List<MessageEmbed> helpPages;
+    private List<MessageEmbed> adminHelpPages;
+    private HashMap<CommandBase, MessageEmbed> commandHelp;
     private int maxDefaultPages;
     private static final MessageEmbed FRONT_PAGE = new EmbedBuilder()
             .setTitle("Mastr Help")
@@ -43,6 +44,10 @@ public class HelpCommand extends CommandBase {
         this.category = CommandCategory.MASTR;
         this.syntax = new String[] {"[page] - Browse the bot's commands", "<command> - Command-specific help"};
         this.examples = new String[] {"help 4", "help kick"};
+
+        helpPages = new ArrayList<>();
+        adminHelpPages = new ArrayList<>();
+        commandHelp = new HashMap<>();
     }
 
     @Override
@@ -75,8 +80,12 @@ public class HelpCommand extends CommandBase {
                     e.getChannel().sendMessage("❌ That command doesn't exit!").queue();
                     return;
                 }
-
-                e.getChannel().sendMessage(createCommandHelpPage(cmd).build()).queue();
+                if(e.getBotUser().getRole().isAtOrAbove(cmd.getMinimumRole())){
+                    e.getChannel().sendMessage(createCommandHelpPage(cmd).build()).queue();
+                }
+                else{
+                    e.getChannel().sendMessage("❌ You don't have permission to access that command.").queue();
+                }
             }
         }
     }
@@ -86,7 +95,7 @@ public class HelpCommand extends CommandBase {
         eb.setTitle("`" + cmd.getCommand() + "`");
         eb.appendDescription(cmd.getDescription())
                 .appendDescription("\n\n**Syntax**:\n")
-                .appendDescription(StringUtil.join(cmd.getSyntax(), "\n"));
+                .appendDescription(syntaxJoin(cmd.getSyntax(), cmd.getCommand(), "\n")).appendDescription("\n");
 
         if(cmd.getAliases().length>0){
             eb.appendDescription("\n**Alias" + (cmd.getAliases().length>1 ? "es" : "") + "**: " + StringUtil.join(cmd.getAliases(), ", "));
@@ -206,6 +215,18 @@ public class HelpCommand extends CommandBase {
                 adminHelpPages.add(pageBuilder.build());
             }
         }
+    }
+
+    private static String syntaxJoin(String[] syntax, String command, String combiner){
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < syntax.length; i++){
+            sb.append(command)
+                    .append(" ")
+                    .append(syntax[i])
+                    .append(combiner);
+        }
+
+        return sb.substring(0, sb.length()-combiner.length());
     }
 
     private class HelpReactionListener extends ReactionListenerIdentity {
