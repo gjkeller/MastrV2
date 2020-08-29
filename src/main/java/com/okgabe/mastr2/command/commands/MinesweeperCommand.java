@@ -12,7 +12,7 @@ import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.command.CommandBase;
 import com.okgabe.mastr2.command.CommandCategory;
 import com.okgabe.mastr2.command.CommandEvent;
-import com.okgabe.mastr2.command.ResponseListenerIdentity;
+import com.okgabe.mastr2.event.ResponseListenerIdentity;
 import com.okgabe.mastr2.util.StringUtil;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Emote;

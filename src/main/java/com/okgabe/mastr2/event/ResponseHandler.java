@@ -6,7 +6,7 @@
  * https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.
  */
 
-package com.okgabe.mastr2.command;
+package com.okgabe.mastr2.event;
 
 import com.okgabe.mastr2.Mastr;
 import net.dv8tion.jda.api.entities.ChannelType;
