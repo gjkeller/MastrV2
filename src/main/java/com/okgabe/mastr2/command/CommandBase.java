@@ -9,7 +9,7 @@
 package com.okgabe.mastr2.command;
 
 import com.okgabe.mastr2.Mastr;
-import com.okgabe.mastr2.util.BotRole;
+import com.okgabe.mastr2.permission.BotRole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

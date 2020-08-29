@@ -12,7 +12,7 @@ import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.command.CommandBase;
 import com.okgabe.mastr2.command.CommandCategory;
 import com.okgabe.mastr2.command.CommandEvent;
-import com.okgabe.mastr2.util.BotRole;
+import com.okgabe.mastr2.permission.BotRole;
 import com.okgabe.mastr2.util.StringUtil;
 
 public class SayCommand extends CommandBase {

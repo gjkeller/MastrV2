@@ -13,7 +13,7 @@ import com.okgabe.mastr2.command.CommandBase;
 import com.okgabe.mastr2.command.CommandCategory;
 import com.okgabe.mastr2.command.CommandEvent;
 import com.okgabe.mastr2.event.ReactionListenerIdentity;
-import com.okgabe.mastr2.util.BotRole;
+import com.okgabe.mastr2.permission.BotRole;
 import com.okgabe.mastr2.util.StringUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;

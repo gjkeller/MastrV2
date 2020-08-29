@@ -6,7 +6,7 @@
  * https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.
  */
 
-package com.okgabe.mastr2.util;
+package com.okgabe.mastr2.permission;
 
 public enum BotRole {
     UNKNOWN("Unknown", -1), DEFAULT("Default", 5), BOT_STAFF("Bot Staff", 20),

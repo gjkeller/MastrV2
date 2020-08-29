@@ -9,7 +9,7 @@
 package com.okgabe.mastr2.entity;
 
 import com.mongodb.lang.Nullable;
-import com.okgabe.mastr2.util.BotRole;
+import com.okgabe.mastr2.permission.BotRole;
 import com.okgabe.mastr2.util.GuildTier;
 import com.okgabe.mastr2.util.SuspensionCode;
 import org.bson.Document;
