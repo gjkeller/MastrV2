@@ -108,7 +108,7 @@ public class Mastr extends ListenerAdapter {
 
         /* GET BOT VERSION */
         VERSION = checkValue(file.getString("version", "null"), "version");
-        if(Checks.isNullString(VERSION)){
+        if(Checks.isEmptyString(VERSION)){
             logger.error("Malformed configuration file for \"version\"!" +
                     " Refer to the default configuration file found at the GitHub page https://github.com/ItsGJK/MastrV2.");
             System.exit(-1);

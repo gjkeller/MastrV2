@@ -74,7 +74,7 @@ public class TimeUtil {
         double days = hours / 24D;
         double years = days / 365D;
 
-        if(60 > seconds) return seconds + " seconds";
+        if(60 > seconds) return seconds + " second" + (seconds == 1 ? "" : "s");
         if(seconds == 60) return "1 minute";
         if(seconds == 3600) return "1 hour";
         if(seconds == 86400) return "1 day";

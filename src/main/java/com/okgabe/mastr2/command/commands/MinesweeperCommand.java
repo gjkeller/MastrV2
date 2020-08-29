@@ -99,9 +99,9 @@ public class MinesweeperCommand extends CommandBase {
         String[][] minesweeperCopy = copy(minesweeperOriginal);
         String minesweeperString = minesweeperToString(minesweeperOriginal);
 
-        e.getChannel().sendMessage(minesweeperString).queue(m1 -> {
+        e.getChannel().sendMessage(minesweeperString).queue(minesweeperMessage -> {
             e.getChannel().sendMessage(e.getAuthor().getAsMention() + ", you have started a game of Minesweeper! Here are some commands you can use:\n" +
-                    "flag <tile>, reveal, end").queue(m2 -> {
+                    "flag <tile>, reveal, end").queue(actionMessage -> {
 
                 MinesweeperResponseListener responseListener = new MinesweeperResponseListener(e.getChannel().getType(), e.getChannel().getIdLong(), e.getBotUser().getUserId(), 10 * 60, ident -> {
                     MinesweeperResponseListener identity = (MinesweeperResponseListener) ident;
@@ -128,7 +128,7 @@ public class MinesweeperCommand extends CommandBase {
                                 if (col == -1) throw new Exception();
                             }
                         } catch (Exception ignored) {
-                            m2.editMessage("You provided an invalid tile!").queue();
+                            actionMessage.editMessage("You provided an invalid tile!").queue();
                             return;
                         }
 
@@ -140,48 +140,31 @@ public class MinesweeperCommand extends CommandBase {
                         }
                         minesweeperCopy[row][col] = tile;
 
-                        m1.editMessage(minesweeperToString(minesweeperCopy)).queue();
-                        m2.editMessage("Set tile " + firstChar + secondChar + " to a flag!").queue();
+                        minesweeperMessage.editMessage(minesweeperToString(minesweeperCopy)).queue();
+                        actionMessage.editMessage("Set tile " + firstChar + secondChar + " to a flag!").queue();
                     } else if (content.startsWith("r")) {
                         ident.getMessage().delete().queue();
-                        m1.editMessage(minesweeperString.replaceAll("\\|\\|", "")).queue(); // Remove all spoilers
-                        m2.editMessage("Revealed! Your game is over.").queue();
+                        minesweeperMessage.editMessage(minesweeperString.replaceAll("\\|\\|", "")).queue(); // Remove all spoilers
+                        actionMessage.editMessage("Revealed! Your game is over.").queue();
                         mastr.getResponseHandler().unregister(identity);
                     } else if (content.startsWith("e")) {
                         ident.getMessage().delete().queue();
-                        m2.editMessage("Ending your game of Minesweeper.").queue();
+                        actionMessage.editMessage("Ending your game of Minesweeper.").queue();
                         mastr.getResponseHandler().unregister(ident);
                     } else {
                         if (identity.isFailedAttempt()) {
-                            m2.editMessage("Ending your game of Minesweeper.").queue();
+                            actionMessage.editMessage("Ending your game of Minesweeper.").queue();
                             mastr.getResponseHandler().unregister(identity);
                         } else {
-                            m2.editMessage("I couldn't understand that. You can say flag, reveal, or end.").queue();
+                            actionMessage.editMessage("I couldn't understand that. You can say flag, reveal, or end.").queue();
                             identity.setFailedAttempt(true);
                         }
                     }
-                }, expiration -> m2.editMessage("Your game of Minesweeper has expired.").queue());
+                }, expiration -> actionMessage.editMessage("Your game of Minesweeper has expired.").queue());
 
                 mastr.getResponseHandler().register(responseListener);
             });
         });
-    }
-
-    public static class MinesweeperResponseListener extends ResponseListenerIdentity {
-
-        private boolean failedAttempt = false;
-
-        public MinesweeperResponseListener(ChannelType channelType, long channelId, long userId, long timeout, Consumer<ResponseListenerIdentity> handler, Consumer<ResponseListenerIdentity> timeoutHandler) {
-            super(channelType, channelId, userId, timeout, handler, timeoutHandler);
-        }
-
-        public boolean isFailedAttempt() {
-            return failedAttempt;
-        }
-
-        public void setFailedAttempt(boolean failedAttempt) {
-            this.failedAttempt = failedAttempt;
-        }
     }
 
     public String minesweeperToString(String[][] field){
@@ -330,6 +313,23 @@ public class MinesweeperCommand extends CommandBase {
                 return iEmote.getAsMention();
             default:
                 return null;
+        }
+    }
+
+    public static class MinesweeperResponseListener extends ResponseListenerIdentity {
+
+        private boolean failedAttempt = false;
+
+        public MinesweeperResponseListener(ChannelType channelType, long channelId, long userId, long timeout, Consumer<ResponseListenerIdentity> handler, Consumer<ResponseListenerIdentity> timeoutHandler) {
+            super(channelType, channelId, userId, timeout, handler, timeoutHandler);
+        }
+
+        public boolean isFailedAttempt() {
+            return failedAttempt;
+        }
+
+        public void setFailedAttempt(boolean failedAttempt) {
+            this.failedAttempt = failedAttempt;
         }
     }
 }

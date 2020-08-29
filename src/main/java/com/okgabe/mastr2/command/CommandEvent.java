@@ -83,4 +83,12 @@ public class CommandEvent {
     public JDA getJDA(){
         return author.getJDA();
     }
+
+    public void replyError(String title, String message){
+
+    }
+
+    public void replySuccess(String title, String message){
+
+    }
 }

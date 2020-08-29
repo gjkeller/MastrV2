@@ -55,7 +55,8 @@ public class StringUtil {
     public static char numberToAlphabet(int n){
         return (char)(97+(n%25));
     }
-    
+
+    // For single-digit numbers - may rewrite to support any number of digits if I need it
     public static String numberToString(int i){
         switch(i){
             case 1:

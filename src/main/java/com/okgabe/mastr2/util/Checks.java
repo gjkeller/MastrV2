@@ -9,11 +9,12 @@
 package com.okgabe.mastr2.util;
 
 public class Checks {
-    public static boolean isNullString(String s){
-        return s == null || s.trim().equals("") || s.equalsIgnoreCase("null");
+    public static boolean isEmptyString(String s){
+        return s == null || s.trim().isEmpty() || s.equalsIgnoreCase("null");
     }
 
     public static boolean isId(String s){
+        if(isEmptyString(s)) return false;
         if(s.length()!=18 || !StringUtil.isNumeric(s)) return false;
         return true;
     }
