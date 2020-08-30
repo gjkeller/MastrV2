@@ -47,7 +47,7 @@ public class TimeUtil {
             if(firstChar=='s'){ //seconds
                 seconds += numbers;
             }
-            else if(chars.length()>1 && chars.substring(0, 2).equals("mo")){ //months
+            else if(chars.length()>1 && chars.startsWith("mo")){ //months
                 seconds += numbers * 2592000;
             }
             else if(firstChar=='m'){ //minutes

@@ -231,10 +231,10 @@ public class HelpCommand extends CommandBase {
 
     private static String syntaxJoin(String[] syntax, String command, String combiner){
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < syntax.length; i++){
+        for (String s : syntax) {
             sb.append(command)
                     .append(" ")
-                    .append(syntax[i])
+                    .append(s)
                     .append(combiner);
         }
 

@@ -136,9 +136,7 @@ public class CommandHandler {
         // Get args and execute command
         String[] args = new String[argsWithCommand.length - 1];
 
-        for(int i = 1; i < args.length+1; i++){
-            args[i-1] = argsWithCommand[i];
-        }
+        System.arraycopy(argsWithCommand, 1, args, 0, args.length + 1 - 1);
 
         executeCommand(cmd, author, channel, message, args, user, guild);
     }

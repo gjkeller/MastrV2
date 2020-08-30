@@ -25,7 +25,7 @@ class ReflectionUtilTest {
         for(Class clazz : commands){
             assertFalse(clazz.isAnonymousClass(), "No anonymous class should be a command");
             assertFalse(clazz.isMemberClass(), "No nested commands");
-            assertFalse(clazz.getConstructors().length>1||clazz.getConstructors().length<1, "Commands should only have one single constructor");
+            assertFalse(clazz.getConstructors().length != 1, "Commands should only have one single constructor");
             assertEquals(clazz.getConstructors()[0].getParameterCount(),1, "Command constructors should only have one parameter");
             assertEquals(clazz.getConstructors()[0].getParameterTypes()[0], Mastr.class, "Command constructors should only have Mastr as their parameter");
         }

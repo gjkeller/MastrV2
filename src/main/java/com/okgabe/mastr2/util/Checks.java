@@ -15,7 +15,6 @@ public class Checks {
 
     public static boolean isId(String s){
         if(isEmptyString(s)) return false;
-        if(s.length()!=18 || !StringUtil.isNumeric(s)) return false;
-        return true;
+        return s.length() == 18 && StringUtil.isNumeric(s);
     }
 }
