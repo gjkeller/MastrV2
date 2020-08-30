@@ -25,6 +25,7 @@ import com.okgabe.mastr2.util.Checks;
 import com.okgabe.mastr2.util.EmoteConstants;
 import com.okgabe.mastr2.util.MastrThreadFactory;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
@@ -167,6 +168,7 @@ public class Mastr extends ListenerAdapter {
         JDA.ShardInfo shardInfo = e.getJDA().getShardInfo();
         logger.info("Shard #" + shardInfo.getShardId() + "/" + shardInfo.getShardTotal() + " started.");
         logger.info("Available guilds on this shard: " + e.getGuildAvailableCount() + "/" + e.getGuildTotalCount() + " (" + e.getGuildUnavailableCount() + " unavailable)");
+        e.getJDA().getPresence().setActivity(Activity.watching("for mas help | okgabe.com/mastr"));
 
         // Load up bot on first shard's completion
         if(shardInfo.getShardId()==0){
@@ -180,6 +182,7 @@ public class Mastr extends ListenerAdapter {
             logger.debug("Building help command...");
             HelpCommand helpCmd = commandHandler.getCommand(HelpCommand.class);
             helpCmd.buildCommandPages();
+            helpCmd.buildIndividualCommandPages();
             logger.debug("Completed help page building");
         }
     }

@@ -14,6 +14,7 @@ import com.okgabe.mastr2.command.CommandCategory;
 import com.okgabe.mastr2.command.CommandEvent;
 import com.okgabe.mastr2.event.ReactionListenerIdentity;
 import com.okgabe.mastr2.permission.BotRole;
+import com.okgabe.mastr2.util.ColorConstants;
 import com.okgabe.mastr2.util.StringUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -29,11 +30,14 @@ public class HelpCommand extends CommandBase {
     private List<MessageEmbed> helpPages;
     private List<MessageEmbed> adminHelpPages;
     private HashMap<CommandBase, MessageEmbed> commandHelp;
+
     private int maxDefaultPages;
     private static final MessageEmbed FRONT_PAGE = new EmbedBuilder()
+            .setColor(ColorConstants.MASTR_COLOR)
             .setTitle("Mastr Help")
-            .setDescription("You can utilize this message to navigate the different commands offered by Mastr.\nUse the reactions on the bottom to " +
-                    "switch between command pages, or click the mailbox to send you a list of my commands to your inbox.")
+            .setDescription("You can utilize this menu to navigate the different commands offered by Mastr.\nUse the emotes at the bottom of this message to " +
+                    "switch between command pages, or click the mailbox to send you a list of my commands to your inbox.\n\n" +
+                    "If you need additional help, see the [Mastr support server](https://discord.gg/MaA5MWa) or the [official website](https://okgabe.com/mastr)")
             .build();
 
     public HelpCommand(Mastr mastr) {
@@ -81,32 +85,13 @@ public class HelpCommand extends CommandBase {
                     return;
                 }
                 if(e.getBotUser().getRole().isAtOrAbove(cmd.getMinimumRole())){
-                    e.getChannel().sendMessage(createCommandHelpPage(cmd).build()).queue();
+                    e.getChannel().sendMessage(commandHelp.get(cmd)).queue();
                 }
                 else{
                     e.getChannel().sendMessage("❌ You don't have permission to access that command.").queue();
                 }
             }
         }
-    }
-
-    public EmbedBuilder createCommandHelpPage(CommandBase cmd){
-        EmbedBuilder eb = new EmbedBuilder();
-        eb.setTitle("`" + cmd.getCommand() + "`");
-        eb.appendDescription(cmd.getDescription())
-                .appendDescription("\n\n**Syntax**:\n")
-                .appendDescription(syntaxJoin(cmd.getSyntax(), cmd.getCommand(), "\n")).appendDescription("\n");
-
-        if(cmd.getAliases().length>0){
-            eb.appendDescription("\n**Alias" + (cmd.getAliases().length>1 ? "es" : "") + "**: " + StringUtil.join(cmd.getAliases(), ", "));
-        }
-
-        eb.appendDescription("\n**Category**: ").appendDescription(cmd.getCategory().getName());
-        if(cmd.getMinimumRole().isAbove(BotRole.DEFAULT)){
-            eb.appendDescription("\n**Permission**: ").appendDescription(cmd.getMinimumRole().getName());
-        }
-
-        return eb;
     }
 
     public void sendHelpEmbed(User owner, MessageChannel channel, int page, boolean admin){
@@ -132,7 +117,7 @@ public class HelpCommand extends CommandBase {
                     case "\u23F9":
                         listener.retrieveMessage().queue(m2 -> m2.delete().queue());
                         break;
-                    case "\uD83D\uDCE5":
+                    case "\uD83D\uDCEB":
                         listener.getChannel().sendMessage(listener.getUser().getAsMention() + ", check your inbox!").queue();
                         break;
                 }
@@ -158,6 +143,12 @@ public class HelpCommand extends CommandBase {
 
     public void setPage(Message m, int page, boolean admin){
         m.editMessage((admin ? adminHelpPages.get(page) : helpPages.get(page))).queue();
+    }
+
+    public void buildIndividualCommandPages(){
+        for(CommandBase cmd : mastr.getCommandHandler().getCommands()){{
+            commandHelp.put(cmd, createCommandHelpPage(cmd).build());
+        }}
     }
 
     public void buildCommandPages(){
@@ -197,6 +188,7 @@ public class HelpCommand extends CommandBase {
             for(int x = 0; x < (cmdsInCat.size()/5) + 1; x++){
                 currentPage++;
                 EmbedBuilder pageBuilder = new EmbedBuilder();
+                pageBuilder.setColor(ColorConstants.MASTR_COLOR);
                 pageBuilder.setTitle("Mastr Help (Page " + (currentPage+1) + "/" + maxDefaultPages + ")");
                 pageBuilder.setDescription("Use `help <command>` for command details");
 
@@ -215,6 +207,26 @@ public class HelpCommand extends CommandBase {
                 adminHelpPages.add(pageBuilder.build());
             }
         }
+    }
+
+    public EmbedBuilder createCommandHelpPage(CommandBase cmd){
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setColor(ColorConstants.MASTR_COLOR);
+        eb.setTitle("`" + cmd.getCommand() + "`");
+        eb.appendDescription(cmd.getDescription())
+                .appendDescription("\n\n**Syntax**:\n")
+                .appendDescription(syntaxJoin(cmd.getSyntax(), cmd.getCommand(), "\n")).appendDescription("\n");
+
+        if(cmd.getAliases().length>0){
+            eb.appendDescription("\n**Alias" + (cmd.getAliases().length>1 ? "es" : "") + "**: " + StringUtil.join(cmd.getAliases(), ", "));
+        }
+
+        eb.appendDescription("\n**Category**: ").appendDescription(cmd.getCategory().getName());
+        if(cmd.getMinimumRole().isAbove(BotRole.DEFAULT)){
+            eb.appendDescription("\n**Permission**: ").appendDescription(cmd.getMinimumRole().getName());
+        }
+
+        return eb;
     }
 
     private static String syntaxJoin(String[] syntax, String command, String combiner){

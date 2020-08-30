@@ -9,7 +9,7 @@
 package com.okgabe.mastr2.permission;
 
 public enum BotRole {
-    UNKNOWN("Unknown", -1), DEFAULT("Default", 5), BOT_STAFF("Bot Staff", 20),
+    UNKNOWN("Unknown", -1), DEFAULT("Default", 5), BOT_TESTER("Bot Tester", 10), BOT_STAFF("Bot Staff", 20),
     BOT_ADMINISTRATOR("Bot Administrator", 50), BOT_MANAGER("Bot Manager", 100), BOT_FOUNDER("Bot Founder", 127);
 
     private final String name;
@@ -43,6 +43,21 @@ public enum BotRole {
         }
 
         return UNKNOWN;
+    }
+
+    public static BotRole find(String name){
+        name = name.toLowerCase();
+        BotRole match = null;
+
+        for(BotRole r : values()){
+            if(r.getName().toLowerCase().contains(name)){
+                // If a match already exists
+                if(match != null) return null;
+                match = r;
+            }
+        }
+
+        return match;
     }
 
     public static BotRole parse(int level){

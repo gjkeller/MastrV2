@@ -9,22 +9,28 @@
 package com.okgabe.mastr2.util;
 
 public class StringUtil {
-    public static String join(String[] args){
+    public static String join(Object[] args){
         return join(args, " ", 0);
     }
 
-    public static String join(String[] args, String combiner){
+    public static String join(Object[] args, String combiner){
         return join(args, combiner, 0);
     }
 
-    public static String join(String[] args, int start){
+    public static String join(Object[] args, int start){
         return join(args, " ", start);
     }
 
-    public static String join(String[] args, String combiner, int start){
+    public static String join(Object[] args, String combiner, int start){
+        if(args.length == 0) return "";
+
         StringBuilder sb = new StringBuilder();
         for(int i = start; i < args.length; i++){
-            sb.append(args[i])
+            if(args[i] == null ) continue;
+            String s = args[i].toString();
+            if(s.equals("")) continue;
+
+            sb.append(args[i].toString())
             .append(combiner);
         }
 
@@ -33,7 +39,7 @@ public class StringUtil {
 
     // From commons-lang StringUtils
     public static boolean isNumeric(String str) {
-        if (str == null) {
+        if (str == null || str.length() == 0) {
             return false;
         }
         int sz = str.length();
@@ -53,7 +59,7 @@ public class StringUtil {
     }
 
     public static char numberToAlphabet(int n){
-        return (char)(97+(n%25));
+        return (char)(97+(n%26));
     }
 
     // For single-digit numbers - may rewrite to support any number of digits if I need it

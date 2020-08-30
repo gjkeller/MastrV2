@@ -11,7 +11,7 @@ package com.okgabe.mastr2.util;
 import java.awt.*;
 
 public class ColorConstants {
-    public static final Color MASTR_COLOR = Color.decode("#8f34eb");
+    public static final Color MASTR_COLOR = Color.decode("#6457FD");
     public static final Color ERROR_COLOR = Color.decode("#ff4242");
     public static final Color SUCCESS_COLOR = Color.decode("#42ff6e");
 }

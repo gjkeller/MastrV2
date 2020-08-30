@@ -94,7 +94,7 @@ public class CommandEvent {
 
     public MessageAction replyError(String title, String message){
         return channel.sendMessage(new EmbedBuilder()
-            .setTitle(EmoteConstants.X_SYMBOL.getAsMention() + title)
+            .setTitle(EmoteConstants.X_SYMBOL.getAsMention() + " " + title)
             .setDescription(message)
             .setColor(ColorConstants.ERROR_COLOR)
             .build()
@@ -107,7 +107,7 @@ public class CommandEvent {
 
     public MessageAction replySuccess(String title, String message){
         return channel.sendMessage(new EmbedBuilder()
-                .setTitle(EmoteConstants.CHECK_SYMBOL.getAsMention() + title)
+                .setTitle(EmoteConstants.CHECK_SYMBOL.getAsMention() + " " + title)
                 .setDescription(message)
                 .setColor(ColorConstants.SUCCESS_COLOR)
                 .build()
