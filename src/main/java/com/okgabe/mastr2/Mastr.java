@@ -22,6 +22,7 @@ import com.okgabe.mastr2.event.ResponseHandler;
 import com.okgabe.mastr2.permission.BotRole;
 import com.okgabe.mastr2.permission.PermissionManager;
 import com.okgabe.mastr2.util.Checks;
+import com.okgabe.mastr2.util.EmoteConstants;
 import com.okgabe.mastr2.util.MastrThreadFactory;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -173,6 +174,9 @@ public class Mastr extends ListenerAdapter {
             directMessageHandler = new DirectMessageHandler(this);
             commandHandler = new CommandHandler(this);
 
+            logger.debug("Populating emote constants...");
+            EmoteConstants.updateEmotes(e.getJDA());
+            logger.debug("Completed emote constant population");
             logger.debug("Building help command...");
             HelpCommand helpCmd = commandHandler.getCommand(HelpCommand.class);
             helpCmd.buildCommandPages();

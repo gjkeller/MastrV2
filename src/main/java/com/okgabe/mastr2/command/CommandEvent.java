@@ -10,10 +10,14 @@ package com.okgabe.mastr2.command;
 
 import com.okgabe.mastr2.entity.BotGuild;
 import com.okgabe.mastr2.entity.BotUser;
+import com.okgabe.mastr2.util.ColorConstants;
+import com.okgabe.mastr2.util.EmoteConstants;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 public class CommandEvent {
     private Member author;
@@ -84,11 +88,29 @@ public class CommandEvent {
         return author.getJDA();
     }
 
-    public void replyError(String title, String message){
-
+    public MessageAction replyError(String message){
+        return replyError(message, null);
     }
 
-    public void replySuccess(String title, String message){
+    public MessageAction replyError(String title, String message){
+        return channel.sendMessage(new EmbedBuilder()
+            .setTitle(EmoteConstants.X_SYMBOL.getAsMention() + title)
+            .setDescription(message)
+            .setColor(ColorConstants.ERROR_COLOR)
+            .build()
+        );
+    }
 
+    public MessageAction replySuccess(String message){
+        return replySuccess(message, null);
+    }
+
+    public MessageAction replySuccess(String title, String message){
+        return channel.sendMessage(new EmbedBuilder()
+                .setTitle(EmoteConstants.CHECK_SYMBOL.getAsMention() + title)
+                .setDescription(message)
+                .setColor(ColorConstants.SUCCESS_COLOR)
+                .build()
+        );
     }
 }
