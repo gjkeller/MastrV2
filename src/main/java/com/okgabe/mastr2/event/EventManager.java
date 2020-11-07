@@ -58,7 +58,7 @@ public class EventManager extends ListenerAdapter {
     }
 
     public void onUserTyping(UserTypingEvent e){
-        e.getMember()
+
     }
 
     @Override
