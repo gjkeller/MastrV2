@@ -24,8 +24,8 @@ import java.util.concurrent.TimeUnit;
 public class ResponseHandler {
 
     private Mastr mastr;
-    private List<ResponseListenerIdentity> guildResponseListeners;
-    private List<ResponseListenerIdentity> dmResponseListeners;
+    private List<ResponseListener> guildResponseListeners;
+    private List<ResponseListener> dmResponseListeners;
 
     public ResponseHandler(Mastr mastr) {
         this.mastr = mastr;
@@ -35,7 +35,7 @@ public class ResponseHandler {
 
     public boolean handleMessage(Message m){
         if(m.isFromType(ChannelType.TEXT)){
-            for(ResponseListenerIdentity identity : guildResponseListeners){
+            for(ResponseListener identity : guildResponseListeners){
                 if(identity.getUserId() == m.getAuthor().getIdLong() && identity.getChannelId() == m.getChannel().getIdLong()){
                     identity.setMessage(m);
                     identity.getHandler().accept(identity);
@@ -44,7 +44,7 @@ public class ResponseHandler {
             }
         }
         else if(m.isFromType(ChannelType.PRIVATE)){
-            for(ResponseListenerIdentity identity : dmResponseListeners){
+            for(ResponseListener identity : dmResponseListeners){
                 if(identity.getUserId() == m.getAuthor().getIdLong() && identity.getChannelId() == m.getChannel().getIdLong()){
                     identity.setMessage(m);
                     identity.getHandler().accept(identity);
@@ -56,7 +56,7 @@ public class ResponseHandler {
         return false;
     }
 
-    public void register(ResponseListenerIdentity responseIdentity){
+    public void register(ResponseListener responseIdentity){
         if(responseIdentity.getChannelType()==ChannelType.TEXT)
             guildResponseListeners.add(responseIdentity);
         else if(responseIdentity.getChannelType()==ChannelType.PRIVATE)
@@ -73,7 +73,7 @@ public class ResponseHandler {
         responseIdentity.setTimeoutSchedule(timeoutSchedule);
     }
 
-    public void unregister(ResponseListenerIdentity identity){
+    public void unregister(ResponseListener identity){
         identity.getTimeoutSchedule().cancel(false);
         if(identity.getChannelType()==ChannelType.TEXT)
             guildResponseListeners.remove(identity);

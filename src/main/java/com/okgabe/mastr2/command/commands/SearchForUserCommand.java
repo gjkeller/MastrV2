@@ -13,18 +13,17 @@ import com.okgabe.mastr2.command.CommandBase;
 import com.okgabe.mastr2.command.CommandCategory;
 import com.okgabe.mastr2.command.CommandEvent;
 import com.okgabe.mastr2.permission.BotRole;
-import com.okgabe.mastr2.util.MentionUtil;
+import com.okgabe.mastr2.util.GuildUtil;
 import com.okgabe.mastr2.util.StringUtil;
 
-public class SayCommand extends CommandBase {
-
-    public SayCommand(Mastr mastr) {
+public class SearchForUserCommand extends CommandBase {
+    public SearchForUserCommand(Mastr mastr) {
         super(mastr);
-        this.command = "say";
-        this.description = "Forces the bot to say something";
+        this.command = "searchforuser";
         this.category = CommandCategory.MASTR_ADMIN;
-        this.syntax = new String[] {"<message>"};
-        this.minimumRole = BotRole.BOT_ADMINISTRATOR;
+        this.description = "Uses the bot's built-in searching function to find a specified user.";
+        this.minimumRole = BotRole.BOT_TESTER;
+        this.syntax = new String[] {"<user>"};
     }
 
     @Override
@@ -34,7 +33,11 @@ public class SayCommand extends CommandBase {
 
     @Override
     public void execute(CommandEvent e) {
-        e.getMessage().delete().queue();
-        e.getChannel().sendMessage(StringUtil.join(e.getArgs())).allowedMentions(MentionUtil.NO_MENTIONS).queue();
+        if(!e.isInGuild()) return;
+
+        String search = e.getArgs()[0];
+        GuildUtil.retrieveMemberByName(mastr, e.getMessage().getTextChannel(), e.getAuthor(), search, true)
+                .onError(err -> e.getChannel().sendMessage(err.getMessage()).queue())
+                .onSuccess(member -> e.getChannel().sendMessage("Your search returned " + StringUtil.nameAndTag(member) + " (" + member.getId() + ")").queue());
     }
 }

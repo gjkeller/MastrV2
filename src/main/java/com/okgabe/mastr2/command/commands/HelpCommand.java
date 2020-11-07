@@ -12,7 +12,7 @@ import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.command.CommandBase;
 import com.okgabe.mastr2.command.CommandCategory;
 import com.okgabe.mastr2.command.CommandEvent;
-import com.okgabe.mastr2.event.ReactionListenerIdentity;
+import com.okgabe.mastr2.event.ReactionListener;
 import com.okgabe.mastr2.permission.BotRole;
 import com.okgabe.mastr2.util.ColorConstants;
 import com.okgabe.mastr2.util.StringUtil;
@@ -69,7 +69,7 @@ public class HelpCommand extends CommandBase {
         else{
             int page;
             try{
-                page = Integer.parseInt(e.getArgs()[0]);
+                page = Integer.parseInt(e.getArgs()[0]) - 1;
 
                 if(page < 0 || isAdmin && page > adminHelpPages.size() || !isAdmin && page > maxDefaultPages){
                     e.getChannel().sendMessage("❌ That page doesn't exit!").queue();
@@ -95,7 +95,9 @@ public class HelpCommand extends CommandBase {
     }
 
     public void sendHelpEmbed(User owner, MessageChannel channel, int page, boolean admin){
-        channel.sendMessage((page == -1 ? FRONT_PAGE : (admin ? adminHelpPages.get(page) : helpPages.get(page)))).queue(m -> {
+        MessageEmbed embedPage = (page == -1 ? FRONT_PAGE : (admin ? adminHelpPages.get(page) : helpPages.get(page)));
+
+        channel.sendMessage(embedPage).queue(m -> {
             HelpReactionListener helpReactionListener = new HelpReactionListener(owner.getJDA(), channel.getType(), channel.getIdLong(), m.getIdLong(), owner.getIdLong(), 5*60,
                     reaction -> {
                 HelpReactionListener listener = (HelpReactionListener) reaction;
@@ -121,11 +123,11 @@ public class HelpCommand extends CommandBase {
                         listener.getChannel().sendMessage(listener.getUser().getAsMention() + ", check your inbox!").queue();
                         break;
                 }
-                if(updated)
-                    listener.retrieveMessage().queue(m2 -> setPage(m2, listener.getPage(), listener.isAdmin()));
+
+                if(updated) listener.retrieveMessage().queue(m2 -> setPage(m2, listener.getPage(), listener.isAdmin()));
 
                 listener.getReaction().removeReaction(listener.getUser()).queue();
-                }, timeout -> {
+                    }, timeout -> {
                 RestAction<Message> message = timeout.retrieveMessage();
                 if(message!=null) message.queue(mes -> m.clearReactions().queue());
             }, page, admin);
@@ -190,9 +192,8 @@ public class HelpCommand extends CommandBase {
                 EmbedBuilder pageBuilder = new EmbedBuilder();
                 pageBuilder.setColor(ColorConstants.MASTR_COLOR);
                 pageBuilder.setTitle("Mastr Help (Page " + (currentPage+1) + "/" + maxDefaultPages + ")");
-                pageBuilder.setDescription("Use `help <command>` for command details");
-
-                pageBuilder.addField(cat.getName(), cat.getDescription(), false);
+                pageBuilder.setDescription("**__" + cat.getName() + "__**\n" + cat.getDescription());
+                pageBuilder.setFooter("Use help <command> for command details");
 
                 // And loop for each command in that page.
                 for(int cmdSelector = x*5; cmdSelector < Math.min(x*5+5, cmdsInCat.size()); cmdSelector++){
@@ -241,12 +242,12 @@ public class HelpCommand extends CommandBase {
         return sb.substring(0, sb.length()-combiner.length());
     }
 
-    private class HelpReactionListener extends ReactionListenerIdentity {
+    private class HelpReactionListener extends ReactionListener {
 
         private int page;
         private boolean admin;
         public HelpReactionListener(JDA jda, ChannelType channelType, long channelId, long messageId, long userId, long timeout,
-                                    Consumer<ReactionListenerIdentity> handler, Consumer<ReactionListenerIdentity> timeoutHandler, int page, boolean admin) {
+                                    Consumer<ReactionListener> handler, Consumer<ReactionListener> timeoutHandler, int page, boolean admin) {
             super(jda, channelType, channelId, messageId, userId, timeout, handler, timeoutHandler);
             this.page = page;
             this.admin = admin;

@@ -46,6 +46,7 @@ class StringUtilTest {
         assertFalse(StringUtil.isNumeric(""));
         assertFalse(StringUtil.isNumeric("f51a"));
         assertFalse(StringUtil.isNumeric(null));
+        assertFalse(StringUtil.isNumeric("-"));
     }
 
     @Test

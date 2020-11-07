@@ -14,6 +14,7 @@ import com.okgabe.mastr2.entity.BotUser;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.events.user.UserTypingEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class EventManager extends ListenerAdapter {
@@ -54,6 +55,10 @@ public class EventManager extends ListenerAdapter {
             // Check if user issued a command
             mastr.getCommandHandler().handleMessage(e, user, guild);
         }
+    }
+
+    public void onUserTyping(UserTypingEvent e){
+        e.getMember()
     }
 
     @Override

@@ -14,18 +14,18 @@ import net.dv8tion.jda.api.entities.Message;
 import java.util.concurrent.ScheduledFuture;
 import java.util.function.Consumer;
 
-public class ResponseListenerIdentity {
+public class ResponseListener {
 
     private ChannelType channelType;
     private long channelId;
     private long userId;
     private long timeout;
-    private Consumer<ResponseListenerIdentity> handler;
-    private Consumer<ResponseListenerIdentity> timeoutHandler;
+    private Consumer<ResponseListener> handler;
+    private Consumer<ResponseListener> timeoutHandler;
     private ScheduledFuture<?> timeoutSchedule;
     private Message message;
 
-    public ResponseListenerIdentity(ChannelType channelType, long channelId, long userId, long timeout, Consumer<ResponseListenerIdentity> handler, Consumer<ResponseListenerIdentity> timeoutHandler) {
+    public ResponseListener(ChannelType channelType, long channelId, long userId, long timeout, Consumer<ResponseListener> handler, Consumer<ResponseListener> timeoutHandler) {
         if(channelType!=ChannelType.PRIVATE && channelType!=ChannelType.TEXT){
             throw new IllegalArgumentException("Provided an invalid ChannelType");
         }
@@ -61,11 +61,11 @@ public class ResponseListenerIdentity {
         return timeout;
     }
 
-    public Consumer<ResponseListenerIdentity> getHandler() {
+    public Consumer<ResponseListener> getHandler() {
         return handler;
     }
 
-    public Consumer<ResponseListenerIdentity> getTimeoutHandler() {
+    public Consumer<ResponseListener> getTimeoutHandler() {
         return timeoutHandler;
     }
 

@@ -8,6 +8,9 @@
 
 package com.okgabe.mastr2.util;
 
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
+
 public class StringUtil {
     public static String join(Object[] args){
         return join(args, " ", 0);
@@ -86,5 +89,13 @@ public class StringUtil {
             default:
                 return  "zero";
         }
+    }
+
+    public static String nameAndTag(Member m){
+        return m.getEffectiveName() + "#" + m.getUser().getDiscriminator();
+    }
+
+    public static String nameAndTag(User u){
+        return u.getAsTag();
     }
 }

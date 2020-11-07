@@ -8,18 +8,21 @@
 
 package com.okgabe.mastr2.command;
 
+import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.entity.BotGuild;
 import com.okgabe.mastr2.entity.BotUser;
 import com.okgabe.mastr2.util.ColorConstants;
 import com.okgabe.mastr2.util.EmoteConstants;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
+import java.util.function.Consumer;
+
 public class CommandEvent {
+
+    private Mastr mastr;
     private Member author;
     private BotGuild botGuild;
     private BotUser botUser;
@@ -27,7 +30,8 @@ public class CommandEvent {
     private Message message;
     private String[] args;
 
-    public CommandEvent(Member author, BotGuild botGuild, BotUser botUser, MessageChannel channel, Message message, String[] args) {
+    public CommandEvent(Mastr mastr, Member author, BotGuild botGuild, BotUser botUser, MessageChannel channel, Message message, String[] args) {
+        this.mastr = mastr;
         this.author = author;
         this.botGuild = botGuild;
         this.botUser = botUser;
@@ -84,8 +88,24 @@ public class CommandEvent {
         this.args = args;
     }
 
-    public JDA getJDA(){
-        return author.getJDA();
+    public Guild getGuild(){
+        return message.getGuild();
+    }
+
+    public MessageAction reply(String message){
+        return channel.sendMessage(message);
+    }
+
+    public MessageAction reply(MessageEmbed message){
+        return channel.sendMessage(message);
+    }
+
+    public void reply(String message, Consumer<Message> afterExecute){
+        channel.sendMessage(message).queue(afterExecute);
+    }
+
+    public void reply(MessageEmbed message, Consumer<Message> afterExecute){
+        channel.sendMessage(message).queue(afterExecute);
     }
 
     public MessageAction replyError(String message){
@@ -112,5 +132,17 @@ public class CommandEvent {
                 .setColor(ColorConstants.SUCCESS_COLOR)
                 .build()
         );
+    }
+
+    public boolean isInGuild(){
+        return message.isFromType(ChannelType.TEXT);
+    }
+
+    public JDA getJDA(){
+        return author.getJDA();
+    }
+
+    public Mastr getMastr() {
+        return mastr;
     }
 }

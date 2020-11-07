@@ -21,8 +21,8 @@ import java.util.concurrent.TimeUnit;
 public class ReactionHandler {
 
     private Mastr mastr;
-    private List<ReactionListenerIdentity> guildReactionListeners;
-    private List<ReactionListenerIdentity> dmReactionListeners;
+    private List<ReactionListener> guildReactionListeners;
+    private List<ReactionListener> dmReactionListeners;
 
     public ReactionHandler(Mastr mastr) {
         this.mastr = mastr;
@@ -32,7 +32,7 @@ public class ReactionHandler {
 
     public void handleReaction(MessageReaction reaction, long messageId, ChannelType channelType, User user){
         if(channelType == ChannelType.TEXT){
-            for(ReactionListenerIdentity identity : guildReactionListeners){
+            for(ReactionListener identity : guildReactionListeners){
                 if(identity.getMessageId() == messageId && user.getIdLong() == identity.getUserId()){
                     identity.setReaction(reaction);
                     identity.getHandler().accept(identity);
@@ -40,7 +40,7 @@ public class ReactionHandler {
             }
         }
         else if(channelType == ChannelType.PRIVATE){
-            for(ReactionListenerIdentity identity : dmReactionListeners){
+            for(ReactionListener identity : dmReactionListeners){
                 if(identity.getMessageId() == messageId && user.getIdLong() == identity.getUserId()){
                     identity.setReaction(reaction);
                     identity.getHandler().accept(identity);
@@ -49,7 +49,7 @@ public class ReactionHandler {
         }
     }
 
-    public void register(ReactionListenerIdentity reactionIdentity){
+    public void register(ReactionListener reactionIdentity){
         if(reactionIdentity.getChannelType() == ChannelType.PRIVATE){
             dmReactionListeners.add(reactionIdentity);
         }
@@ -68,7 +68,7 @@ public class ReactionHandler {
         reactionIdentity.setTimeoutSchedule(timeoutSchedule);
     }
 
-    public void unregister(ReactionListenerIdentity reactionIdentity){
+    public void unregister(ReactionListener reactionIdentity){
         reactionIdentity.getTimeoutSchedule().cancel(false);
         if(reactionIdentity.getChannelType()==ChannelType.TEXT)
             guildReactionListeners.remove(reactionIdentity);

@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.requests.RestAction;
 import java.util.concurrent.ScheduledFuture;
 import java.util.function.Consumer;
 
-public class ReactionListenerIdentity {
+public class ReactionListener {
 
     private JDA jda;
     private ChannelType channelType;
@@ -23,13 +23,13 @@ public class ReactionListenerIdentity {
     private long userId;
     private long timeout;
     private long channelId;
-    private Consumer<ReactionListenerIdentity> handler;
-    private Consumer<ReactionListenerIdentity> timeoutHandler;
+    private Consumer<ReactionListener> handler;
+    private Consumer<ReactionListener> timeoutHandler;
 
     private ScheduledFuture<?> timeoutSchedule;
     private MessageReaction reaction;
 
-    public ReactionListenerIdentity(JDA jda, ChannelType channelType, long channelId, long messageId, long userId, long timeout, Consumer<ReactionListenerIdentity> handler, Consumer<ReactionListenerIdentity> timeoutHandler) {
+    public ReactionListener(JDA jda, ChannelType channelType, long channelId, long messageId, long userId, long timeout, Consumer<ReactionListener> handler, Consumer<ReactionListener> timeoutHandler) {
         this.jda = jda;
         this.channelType = channelType;
         this.channelId = channelId;
@@ -64,11 +64,11 @@ public class ReactionListenerIdentity {
         return timeout;
     }
 
-    public Consumer<ReactionListenerIdentity> getHandler() {
+    public Consumer<ReactionListener> getHandler() {
         return handler;
     }
 
-    public Consumer<ReactionListenerIdentity> getTimeoutHandler() {
+    public Consumer<ReactionListener> getTimeoutHandler() {
         return timeoutHandler;
     }
 

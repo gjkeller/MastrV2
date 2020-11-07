@@ -79,7 +79,7 @@ public class Mastr extends ListenerAdapter {
             System.err.println("Failed to find configuration file. Please leave \"config.hjson\" in the same directory as the bot's .jar file. Refer to the GitHub page," +
                     " https://github.com/ItsGJK/MastrV2, for more information.");
             System.exit(-1);
-            return; // To shut up the IDEs
+            return;
         }
 
         /* GET LOGGER MODE */
@@ -168,7 +168,7 @@ public class Mastr extends ListenerAdapter {
         JDA.ShardInfo shardInfo = e.getJDA().getShardInfo();
         logger.info("Shard #" + shardInfo.getShardId() + "/" + shardInfo.getShardTotal() + " started.");
         logger.info("Available guilds on this shard: " + e.getGuildAvailableCount() + "/" + e.getGuildTotalCount() + " (" + e.getGuildUnavailableCount() + " unavailable)");
-        e.getJDA().getPresence().setActivity(Activity.watching("for mas help | okgabe.com/mastr"));
+        e.getJDA().getPresence().setActivity(Activity.watching("for @Mastr"));
 
         // Load up bot on first shard's completion
         if(shardInfo.getShardId()==0){

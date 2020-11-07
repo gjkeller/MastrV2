@@ -10,14 +10,7 @@ package com.okgabe.mastr2.util;
 
 import com.okgabe.mastr2.command.CommandBase;
 import org.reflections.Reflections;
-import org.reflections.scanners.ResourcesScanner;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
-import org.reflections.util.FilterBuilder;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 public class ReflectionUtil {
@@ -77,16 +70,10 @@ public class ReflectionUtil {
 //    }
 
     // From https://stackoverflow.com/questions/520328/can-you-find-all-classes-in-a-package-using-reflection
+    // Due to incompatibility issues with Java 11, the Reflections library had to be downgraded from 0.9.12 to 0.9.11. Check in with
+    // this library in the future to see if a newer version is out which fixes this issue.
     public static Set<Class<? extends CommandBase>> getClasses(String packageName){
-        List<ClassLoader> classLoadersList = new LinkedList<>();
-        classLoadersList.add(ClasspathHelper.contextClassLoader());
-        classLoadersList.add(ClasspathHelper.staticClassLoader());
-
-        Reflections reflections = new Reflections(new ConfigurationBuilder()
-                .setScanners(new SubTypesScanner(false /* don't exclude Object.class */), new ResourcesScanner())
-                .setUrls(ClasspathHelper.forClassLoader(classLoadersList.toArray(new ClassLoader[0])))
-                .filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix(packageName))));
-
+        Reflections reflections = new Reflections(packageName);
         return reflections.getSubTypesOf(CommandBase.class);
     }
 }

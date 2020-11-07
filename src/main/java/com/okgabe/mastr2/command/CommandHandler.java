@@ -163,7 +163,7 @@ public class CommandHandler {
                 return;
             }
 
-            CommandEvent e = new CommandEvent(author, guild, user, channel, message, args);
+            CommandEvent e = new CommandEvent(mastr, author, guild, user, channel, message, args);
             boolean properCall = cmd.called(e);
             if(properCall){
                 user.incrementTimesUsed();

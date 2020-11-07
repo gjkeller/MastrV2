@@ -12,7 +12,7 @@ import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.command.CommandBase;
 import com.okgabe.mastr2.command.CommandCategory;
 import com.okgabe.mastr2.command.CommandEvent;
-import com.okgabe.mastr2.event.ResponseListenerIdentity;
+import com.okgabe.mastr2.event.ResponseListener;
 import com.okgabe.mastr2.util.StringUtil;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Emote;
@@ -316,11 +316,11 @@ public class MinesweeperCommand extends CommandBase {
         }
     }
 
-    public static class MinesweeperResponseListener extends ResponseListenerIdentity {
+    public static class MinesweeperResponseListener extends ResponseListener {
 
         private boolean failedAttempt = false;
 
-        public MinesweeperResponseListener(ChannelType channelType, long channelId, long userId, long timeout, Consumer<ResponseListenerIdentity> handler, Consumer<ResponseListenerIdentity> timeoutHandler) {
+        public MinesweeperResponseListener(ChannelType channelType, long channelId, long userId, long timeout, Consumer<ResponseListener> handler, Consumer<ResponseListener> timeoutHandler) {
             super(channelType, channelId, userId, timeout, handler, timeoutHandler);
         }
 
