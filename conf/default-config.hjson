@@ -7,7 +7,7 @@
 // Create a copy of this configuration
 // and rename it "config.hjson"
 
-    "version": "BETA 1.0",
+    "version": "1.0.0-B",
     "mongodb connection string": "mongodb://username:password@host_ip_address:27017/?authSource=admin",
     // Token to log into bot
     "bot token": "Bot token",

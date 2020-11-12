@@ -1,0 +1,7 @@
+version: "3.8"
+
+services:
+  mastr-jda:
+    build: ./
+    volumes:
+      - ./conf/:/usr/src/mastr/conf

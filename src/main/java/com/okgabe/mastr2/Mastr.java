@@ -70,8 +70,22 @@ public class Mastr extends ListenerAdapter {
         /* LOAD CONFIGURATION FILE */
         Reader configReader;
         JsonObject file;
+        String confPath;
+        if(args.length==1){
+            confPath = args[0];
+        }
+        else if(args.length==0) {
+            confPath = "config.hjson";
+        }
+        else{
+            System.err.println("Invalid startup arguments. The only argument that should be provided is the path to the bot's configuration file, which will " +
+                    "default to \"config.hjson\". Refer to the GitHub page, https://github.com/ItsGJK/MastrV2, for more information.");
+            System.exit(-1);
+            return;
+        }
+
         try{
-            File configurationFile = new File("config.hjson");
+            File configurationFile = new File(confPath);
             configReader = new FileReader(configurationFile);
             file = JsonObject.readHjson(configReader).asObject();
         }
