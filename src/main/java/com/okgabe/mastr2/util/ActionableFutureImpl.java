@@ -12,19 +12,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-public class IActionableFuture<T> implements ActionableFuture<T> {
+public class ActionableFutureImpl<T> implements ActionableFuture<T> {
 
     private Consumer<? super Throwable> onFailure;
     private Consumer<T> onSuccess;
 
     @Override
-    public IActionableFuture<T> onError(@NotNull Consumer<? super Throwable> callback) {
+    public ActionableFutureImpl<T> onError(@NotNull Consumer<? super Throwable> callback) {
         onFailure = callback;
         return this;
     }
 
     @Override
-    public IActionableFuture<T> onSuccess(@NotNull Consumer<T> success) {
+    public ActionableFutureImpl<T> onSuccess(@NotNull Consumer<T> success) {
         onSuccess = success;
         return this;
     }

@@ -7,6 +7,7 @@
 // Create a copy of this configuration
 // and rename it "config.hjson"
 
+    // Version must match the format of three numbers and a character. Example: 0.0.1-B
     "version": "1.0.0-B",
     "mongodb connection string": "mongodb://username:password@host_ip_address:27017/?authSource=admin",
     // Token to log into bot
@@ -16,19 +17,19 @@
     "managers": ["User ID"],
 
     // Bot access mode
-        // Options:
-        // Bot Manager (only bot managers/owners)
-        // Bot Administrator (only bot admins and up)
-        // Bot Staff (only bot staff and up)
-        // Default
+    // Options:
+    //  - Bot Manager (only bot managers/owners)
+    //  - Bot Administrator (only bot admins and up)
+    //  - Bot Staff (only bot staff and up)
+    //  - Default
     "bot mode": "default",
 
     // Logging mode
-        // Options:
-        // Trace (prints all messages)
-        // Debug (print normal debug messages)
-        // Info (normal logging up to info level)
-        // Warn (only logs warnings and above)
-        // Error (only logs errors)
+    // Options:
+    //  - Trace (prints all messages)
+    //  - Debug (print normal debug messages)
+    //  - Info (normal logging up to info level)
+    //  - Warn (only logs warnings and above)
+    //  - Error (only logs errors)
     "log mode": "info"
 }

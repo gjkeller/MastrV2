@@ -13,6 +13,6 @@ import java.util.function.Consumer;
 
 public interface ActionableFuture<T> {
 
-    IActionableFuture<T> onError(@Nonnull Consumer<? super Throwable> callback);
-    IActionableFuture<T> onSuccess(@Nonnull Consumer<T> success);
+    ActionableFutureImpl<T> onError(@Nonnull Consumer<? super Throwable> callback);
+    ActionableFutureImpl<T> onSuccess(@Nonnull Consumer<T> success);
 }

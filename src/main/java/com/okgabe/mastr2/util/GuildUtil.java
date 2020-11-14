@@ -19,16 +19,16 @@ import java.util.List;
 
 public class GuildUtil {
 
-    public static IActionableFuture<Member> retrieveMemberByName(CommandEvent e, String search){
+    public static ActionableFutureImpl<Member> retrieveMemberByName(CommandEvent e, String search){
         return retrieveMemberByName(e.getMastr(), e.getMessage().getTextChannel(), e.getAuthor(), search, true);
     }
 
-    public static IActionableFuture<Member> retrieveMemberByName(CommandEvent e, String search, boolean allowClarification){
+    public static ActionableFutureImpl<Member> retrieveMemberByName(CommandEvent e, String search, boolean allowClarification){
         return retrieveMemberByName(e.getMastr(), e.getMessage().getTextChannel(), e.getAuthor(), search, allowClarification);
     }
 
-    public static IActionableFuture<Member> retrieveMemberByName(Mastr mastr, TextChannel channel, Member invoker, String search, boolean allowClarification){
-        IActionableFuture<Member> returnFuture = new IActionableFuture<>();
+    public static ActionableFutureImpl<Member> retrieveMemberByName(Mastr mastr, TextChannel channel, Member invoker, String search, boolean allowClarification){
+        ActionableFutureImpl<Member> returnFuture = new ActionableFutureImpl<>();
 
         channel.getGuild().retrieveMembersByPrefix(search, 100).onSuccess(members -> {
             if(members.size() == 0){ // No results

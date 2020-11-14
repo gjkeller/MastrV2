@@ -6,7 +6,7 @@
  * https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.
  */
 
-package com.okgabe.mastr2.command.commands;
+package com.okgabe.mastr2.command.commands.mastradmin;
 
 import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.command.CommandBase;

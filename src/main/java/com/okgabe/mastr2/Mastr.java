@@ -13,7 +13,7 @@ import ch.qos.logback.classic.LoggerContext;
 import com.mongodb.MongoException;
 import com.okgabe.mastr2.cache.CacheManager;
 import com.okgabe.mastr2.command.CommandHandler;
-import com.okgabe.mastr2.command.commands.HelpCommand;
+import com.okgabe.mastr2.command.commands.mastr.HelpCommand;
 import com.okgabe.mastr2.db.DatabaseManager;
 import com.okgabe.mastr2.dm.DirectMessageHandler;
 import com.okgabe.mastr2.event.EventManager;
