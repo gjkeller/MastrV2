@@ -64,8 +64,8 @@ public class Mastr extends ListenerAdapter {
     private ScheduledExecutorService scheduler;
 
     public static void main(String[] args) {
-        System.out.println("Starting up Mastr...");
-        System.out.println("Loading settings from configuration file...");
+        System.out.println("Starting up Mastr");
+        System.out.println("Loading settings from configuration file");
 
         /* LOAD CONFIGURATION FILE */
         Reader configReader;
@@ -79,7 +79,7 @@ public class Mastr extends ListenerAdapter {
         }
         else{
             System.err.println("Invalid startup arguments. The only argument that should be provided is the path to the bot's configuration file, which will " +
-                    "default to \"config.hjson\". Refer to the GitHub page, https://github.com/ItsGJK/MastrV2, for more information.");
+                    "default to \"config.hjson\". Refer to the GitHub page, https://github.com/okgabe/MastrV2, for more information.");
             System.exit(-1);
             return;
         }
@@ -91,7 +91,7 @@ public class Mastr extends ListenerAdapter {
         }
         catch(IOException ex){
             System.err.println("Failed to find configuration file. Please leave \"config.hjson\" in the same directory as the bot's .jar file. Refer to the GitHub page," +
-                    " https://github.com/ItsGJK/MastrV2, for more information.");
+                    " https://github.com/okgabe/MastrV2, for more information.");
             System.exit(-1);
             return;
         }
@@ -100,7 +100,7 @@ public class Mastr extends ListenerAdapter {
         Level logMode = Level.toLevel(checkValue(file.getString("log mode", "null"), "log mode").toUpperCase(), Level.INFO);
         if(logMode == null){
             System.err.println("Malformed configuration file for \"log mode\"!" +
-                    " Refer to the default configuration file found at the GitHub page https://github.com/ItsGJK/MastrV2.");
+                    " Refer to the default configuration file found at the GitHub page https://github.com/okgabe/MastrV2.");
             System.exit(-1);
             return;
         }
@@ -117,7 +117,7 @@ public class Mastr extends ListenerAdapter {
         BotRole botMode = BotRole.parse(checkValue(file.getString("bot mode", "null"), "bot mode"));
         if(botMode == null){
             logger.error("Malformed configuration file for \"bot mode\"!" +
-                    " Refer to the default configuration file found at the GitHub page https://github.com/ItsGJK/MastrV2.");
+                    " Refer to the default configuration file found at the GitHub page https://github.com/okgabe/MastrV2.");
             System.exit(-1);
             return;
         }
@@ -126,7 +126,7 @@ public class Mastr extends ListenerAdapter {
         VERSION = checkValue(file.getString("version", "null"), "version");
         if(Checks.isEmptyString(VERSION)){
             logger.error("Malformed configuration file for \"version\"!" +
-                    " Refer to the default configuration file found at the GitHub page https://github.com/ItsGJK/MastrV2.");
+                    " Refer to the default configuration file found at the GitHub page https://github.com/okgabe/MastrV2.");
             System.exit(-1);
             return;
         }
@@ -149,7 +149,7 @@ public class Mastr extends ListenerAdapter {
     }
 
     private Mastr(String token, String dbConnectionString, BotRole botMode, Collection<String> managers){
-        logger.info("Connecting to database...");
+        logger.info("Connecting to database");
         try{
             databaseManager = new DatabaseManager(dbConnectionString);
         }
@@ -160,7 +160,7 @@ public class Mastr extends ListenerAdapter {
         }
 
         logger.info("Connection successful. Authentication will begin on the next transaction.");
-        logger.info("Starting the bot...");
+        logger.info("Starting the bot");
         try{
             DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(token);
             eventManager = new EventManager(this);
@@ -204,7 +204,7 @@ public class Mastr extends ListenerAdapter {
     private static String checkValue(String value, String valueName){
         if(value.equals("null")){
             logger.error("Malformed configuration file for \"" + valueName + "\"! " +
-                    "Refer to the default configuration file found at the GitHub page https://github.com/ItsGJK/MastrV2.");
+                    "Refer to the default configuration file found at the GitHub page https://github.com/okgabe/MastrV2.");
             System.exit(-1);
             return "";
         }

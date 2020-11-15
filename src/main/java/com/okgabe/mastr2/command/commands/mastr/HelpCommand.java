@@ -15,6 +15,7 @@ import com.okgabe.mastr2.command.CommandEvent;
 import com.okgabe.mastr2.event.ReactionListener;
 import com.okgabe.mastr2.permission.BotRole;
 import com.okgabe.mastr2.util.ColorConstants;
+import com.okgabe.mastr2.util.EmoteConstants;
 import com.okgabe.mastr2.util.StringUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -68,27 +69,27 @@ public class HelpCommand extends CommandBase {
         }
         else{
             int page;
-            try{
+            boolean isNumber = StringUtil.isNumeric(e.getArgs()[0]);
+
+            if(isNumber){ // If user inputted a number
                 page = Integer.parseInt(e.getArgs()[0]) - 1;
 
                 if(page < 0 || isAdmin && page > adminHelpPages.size() || !isAdmin && page > maxDefaultPages){
-                    e.getChannel().sendMessage("❌ That page doesn't exit!").queue();
-                    return;
+                    e.getChannel().sendMessage(EmoteConstants.X_SYMBOL + " That page doesn't exit!").queue();
                 }
 
                 sendHelpEmbed(e.getAuthor().getUser(), e.getChannel(), page, isAdmin);
             }
-            catch(NumberFormatException ex){
+            else{ // If user inputted a command
                 CommandBase cmd = mastr.getCommandHandler().getCommand(e.getArgs()[0]);
                 if(cmd == null){
-                    e.getChannel().sendMessage("❌ That command doesn't exit!").queue();
-                    return;
+                    e.getChannel().sendMessage(EmoteConstants.X_SYMBOL + " That command doesn't exit!").queue();
                 }
-                if(e.getBotUser().getRole().isAtOrAbove(cmd.getMinimumRole())){
-                    e.getChannel().sendMessage(commandHelp.get(cmd)).queue();
+                else if(cmd.getMinimumRole().isAbove(e.getBotUser().getRole())){
+                    e.getChannel().sendMessage(EmoteConstants.X_SYMBOL + " You don't have permission to access that command.").queue();
                 }
                 else{
-                    e.getChannel().sendMessage("❌ You don't have permission to access that command.").queue();
+                    e.getChannel().sendMessage(commandHelp.get(cmd)).queue();
                 }
             }
         }

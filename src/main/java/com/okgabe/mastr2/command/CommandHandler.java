@@ -11,6 +11,7 @@ package com.okgabe.mastr2.command;
 import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.entity.BotGuild;
 import com.okgabe.mastr2.entity.BotUser;
+import com.okgabe.mastr2.util.EmoteConstants;
 import com.okgabe.mastr2.util.ReflectionUtil;
 import com.okgabe.mastr2.util.StringUtil;
 import net.dv8tion.jda.api.entities.Member;
@@ -99,14 +100,14 @@ public class CommandHandler {
             parseCommand(e.getMember(), e.getTextChannel(), e.getMessage(), prefix, user, guild);
         }
         else if(content.startsWith("<@" + mastrId + ">")){
-            if(content.trim().length() <= 21){
+            if(content.trim().length() == 21){
                 e.getChannel().sendMessage("Hey! My prefix for this server is `" + prefix + "`. If you need help, you can use `" + prefix + "help` or DM me!" +
                         "\nIf you don't like remembering bot prefixes, mentioning me works as a command prefix as well.").queue();
             }
             else parseCommand(e.getMember(), e.getTextChannel(), e.getMessage(), "<@" + mastrId + "> ", user, guild);
         }
         else if(content.startsWith("<@!" + mastrId + ">")){
-            if(content.trim().length() <= 22){
+            if(content.trim().length() == 22){
                 e.getChannel().sendMessage("Hey! My prefix for this server is `" + prefix + "`. If you need help, you can use `" + prefix + "help` or DM me!" +
                         "\nIf you don't like remembering bot prefixes, mentioning me works as a command prefix as well.").queue();
             }
@@ -129,14 +130,13 @@ public class CommandHandler {
         // Get information about the command
         String content = message.getContentRaw();
         String contentNoPrefix = content.substring(prefix.length());
-        String[] argsWithCommand = contentNoPrefix.split(" ");
-        CommandBase cmd = searchForCommand(argsWithCommand[0]);
+        List<String> argsWithCommandList = StringUtil.splitBySpaces(contentNoPrefix, true);
+        CommandBase cmd = searchForCommand(argsWithCommandList.get(0));
         if(cmd == null) return;
 
         // Get args and execute command
-        String[] args = new String[argsWithCommand.length - 1];
-
-        System.arraycopy(argsWithCommand, 1, args, 0, args.length + 1 - 1);
+        String[] args = new String[argsWithCommandList.size()-1];
+        if(argsWithCommandList.size() != 1) args = argsWithCommandList.subList(1, argsWithCommandList.size()).toArray(args);
 
         executeCommand(cmd, author, channel, message, args, user, guild);
     }
@@ -159,7 +159,7 @@ public class CommandHandler {
         logger.debug("Command " + cmd.getCommand() + " received from user " + author.getUser().getName() + " (" + author.getUser().getId() + ") in guild " + author.getGuild().getName() + " (" + author.getGuild().getId() + ")");
         try{
             if(!user.getRole().isAtOrAbove(cmd.getMinimumRole())){
-                channel.sendMessage("❌ You must be a `" + cmd.getMinimumRole().getName() + "` or above to run this command.").queue();
+                channel.sendMessage(EmoteConstants.X_SYMBOL + " You must be a `" + cmd.getMinimumRole().getName() + "` or above to run this command.").queue();
                 return;
             }
 
@@ -174,14 +174,14 @@ public class CommandHandler {
                 cmd.execute(e);
             }
             else{
-                channel.sendMessage("❌ Wrong command usage.").queue();
+                channel.sendMessage(EmoteConstants.X_SYMBOL + " Wrong command usage.").queue();
             }
         }
         catch(InsufficientPermissionException ex){
-            channel.sendMessage("❌ I need the permission: " + ex.getPermission().getName()).queue();
+            channel.sendMessage(EmoteConstants.X_SYMBOL + " I need the permission: " + ex.getPermission().getName()).queue();
         }
         catch(Exception ex){
-            channel.sendMessage("❌ An error occurred.").queue();
+            channel.sendMessage(EmoteConstants.X_SYMBOL + " An error occurred.").queue();
             logger.debug("An error has occurred running " + cmd.getCommand() + ": ", ex);
         }
     }

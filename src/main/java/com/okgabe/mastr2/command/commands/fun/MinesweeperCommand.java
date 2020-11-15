@@ -116,18 +116,19 @@ public class MinesweeperCommand extends CommandBase {
                         char secondChar = tileCode.charAt(1);
                         int row;
                         int col;
+                        boolean validTitle = true;
 
-                        try {
-                            if (StringUtil.isNumeric(String.valueOf(firstChar))) {
-                                row = Integer.parseInt(String.valueOf(firstChar)) - 1;
-                                col = StringUtil.positionInAlphabet(secondChar);
-                                if (col == -1) throw new Exception();
-                            } else {
-                                row = Integer.parseInt(String.valueOf(secondChar)) - 1;
-                                col = StringUtil.positionInAlphabet(firstChar);
-                                if (col == -1) throw new Exception();
-                            }
-                        } catch (Exception ignored) {
+                        if (StringUtil.isNumeric(String.valueOf(firstChar))) {
+                            row = Integer.parseInt(String.valueOf(firstChar)) - 1;
+                            col = StringUtil.positionInAlphabet(secondChar);
+                            if (col == -1) validTitle = false;
+                        } else {
+                            row = Integer.parseInt(String.valueOf(secondChar)) - 1;
+                            col = StringUtil.positionInAlphabet(firstChar);
+                            if (col == -1) validTitle = false;
+                        }
+
+                        if(!validTitle){
                             actionMessage.editMessage("You provided an invalid tile!").queue();
                             return;
                         }
