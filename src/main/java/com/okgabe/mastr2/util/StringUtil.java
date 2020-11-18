@@ -29,15 +29,13 @@ public class StringUtil {
     }
 
     public static String join(Object[] args, String combiner, int start){
-        if(args.length == 0) return "";
-
         StringBuilder sb = new StringBuilder();
         for(int i = start; i < args.length; i++){
             if(args[i] == null) continue;
             String s = args[i].toString();
             if(s.equals("")) continue;
+            sb.append(s);
 
-            sb.append(args[i].toString());
             if(i != args.length-1){
                 sb.append(combiner);
             }

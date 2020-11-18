@@ -204,8 +204,6 @@ public class CommandHandler {
         return null;
     }
 
-
-
     /**
      * Attempt to get the cached prefix for a guild, or if not cached, get from the database
      *

@@ -12,13 +12,13 @@ public enum CommandCategory {
     MODERATION("Moderation", "Moderating your server", 0),
     FUN("Fun", "Fun commands for when you're bored",  10),
     MISC("Miscellaneous", "Other random commands", 20),
-    UTIL("Utilities", "Commands that make your life easier", 30),
+    UTILS("Utilities", "Commands that make your life easier", 30),
     MASTR("Mastr", "Commands related to Mastr",  40),
     MASTR_ADMIN("Bot Administrative", "Commands only for bot admins", 50);
 
-    private String name;
-    private String description;
-    private int id;
+    private final String name;
+    private final String description;
+    private final int id;
 
     CommandCategory(String name, String description, int id) {
         this.name = name;
