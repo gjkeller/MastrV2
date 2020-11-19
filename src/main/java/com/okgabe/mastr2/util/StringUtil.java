@@ -33,7 +33,7 @@ public class StringUtil {
         for(int i = start; i < args.length; i++){
             if(args[i] == null) continue;
             String s = args[i].toString();
-            if(s.equals("")) continue;
+            if(s.length()==0) continue;
             sb.append(s);
 
             if(i != args.length-1){
@@ -147,5 +147,18 @@ public class StringUtil {
         if(builder.length() > 0) split.add(builder.toString()); // Append last string to list
 
         return split;
+    }
+
+    public static String pad(String s, boolean left, boolean right){
+            String formatted = s;
+
+            if(!formatted.startsWith(" ")){
+                formatted = " " + formatted;
+            }
+            if(!formatted.endsWith(" ")){
+                formatted += " ";
+            }
+
+            return formatted;
     }
 }

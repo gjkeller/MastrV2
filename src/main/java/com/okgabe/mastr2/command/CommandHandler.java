@@ -101,14 +101,14 @@ public class CommandHandler {
         }
         else if(content.startsWith("<@" + mastrId + ">")){
             if(content.trim().length() == 21){
-                e.getChannel().sendMessage("Hey! My prefix for this server is `" + prefix + "`. If you need help, you can use `" + prefix + "help` or DM me!" +
+                e.getChannel().sendMessage("Hey! My prefix for this server is `" + prefix.trim() + "`. If you need help, you can use `" + prefix + "help` or DM me!" +
                         "\nIf you don't like remembering bot prefixes, mentioning me works as a command prefix as well.").queue();
             }
             else parseCommand(e.getMember(), e.getTextChannel(), e.getMessage(), "<@" + mastrId + "> ", user, guild);
         }
         else if(content.startsWith("<@!" + mastrId + ">")){
             if(content.trim().length() == 22){
-                e.getChannel().sendMessage("Hey! My prefix for this server is `" + prefix + "`. If you need help, you can use `" + prefix + "help` or DM me!" +
+                e.getChannel().sendMessage("Hey! My prefix for this server is `" + prefix.trim() + "`. If you need help, you can use `" + prefix + "help` or DM me!" +
                         "\nIf you don't like remembering bot prefixes, mentioning me works as a command prefix as well.").queue();
             }
             else parseCommand(e.getMember(), e.getTextChannel(), e.getMessage(), "<@!" + mastrId + "> ", user, guild);
@@ -213,7 +213,7 @@ public class CommandHandler {
     public String retrievePrefix(long guildId){
         String cached = mastr.getCacheManager().getPrefix(guildId);
 
-        if(cached!=null) return cached;
+        if(cached != null) return cached;
 
         String prefix = mastr.getDatabaseManager().getGuildPrefix(guildId);
         mastr.getCacheManager().setPrefix(guildId, prefix);

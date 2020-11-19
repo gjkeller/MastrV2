@@ -75,7 +75,8 @@ public class HelpCommand extends CommandBase {
                 page = Integer.parseInt(e.getArgs()[0]) - 1;
 
                 if(page < 0 || isAdmin && page > adminHelpPages.size() || !isAdmin && page > maxDefaultPages){
-                    e.getChannel().sendMessage(EmoteConstants.X_SYMBOL + " That page doesn't exit!").queue();
+                    e.getChannel().sendMessage(EmoteConstants.X_SYMBOL + " That page doesn't exist!").queue();
+                    return;
                 }
 
                 sendHelpEmbed(e.getAuthor().getUser(), e.getChannel(), page, isAdmin);
@@ -83,7 +84,7 @@ public class HelpCommand extends CommandBase {
             else{ // If user inputted a command
                 CommandBase cmd = mastr.getCommandHandler().getCommand(e.getArgs()[0]);
                 if(cmd == null){
-                    e.getChannel().sendMessage(EmoteConstants.X_SYMBOL + " That command doesn't exit!").queue();
+                    e.getChannel().sendMessage(EmoteConstants.X_SYMBOL + " That command doesn't exist!").queue();
                 }
                 else if(cmd.getMinimumRole().isAbove(e.getBotUser().getRole())){
                     e.getChannel().sendMessage(EmoteConstants.X_SYMBOL + " You don't have permission to access that command.").queue();
@@ -118,14 +119,14 @@ public class HelpCommand extends CommandBase {
                         updated = listener.lastPage();
                         break;
                     case "\u23F9":
-                        listener.retrieveMessage().queue(m2 -> m2.delete().queue());
+                        listener.retrieveMessage().queue(m2 -> m2.delete().queue(s -> {}, f -> {}));
                         break;
                     case "\uD83D\uDCEB":
                         listener.getChannel().sendMessage(listener.getUser().getAsMention() + ", check your inbox!").queue();
                         break;
                 }
 
-                if(updated) listener.retrieveMessage().queue(m2 -> setPage(m2, listener.getPage(), listener.isAdmin()));
+                if(updated) listener.retrieveMessage().queue(m2 -> setPage(m2, listener.getPage(), listener.isAdmin()), f -> {});
 
                 listener.getReaction().removeReaction(listener.getUser()).queue();
                     }, timeout -> {
@@ -145,7 +146,7 @@ public class HelpCommand extends CommandBase {
     }
 
     public void setPage(Message m, int page, boolean admin){
-        m.editMessage((admin ? adminHelpPages.get(page) : helpPages.get(page))).queue();
+        m.editMessage((admin ? adminHelpPages.get(page) : helpPages.get(page))).queue(s -> {}, f -> {});
     }
 
     public void buildIndividualCommandPages(){
@@ -170,6 +171,7 @@ public class HelpCommand extends CommandBase {
             List<CommandBase> cmds = commands.stream()
                     .filter(cmd -> cmd.getCategory() == category)
                     .collect(Collectors.toList());
+
             if(cmds.size()==0) {
                 categories.remove(category);
                 i = i-1;
@@ -203,7 +205,8 @@ public class HelpCommand extends CommandBase {
                 }
 
                 // Then store the page
-                helpPages.add(pageBuilder.build());
+                if(cat != CommandCategory.MASTR_ADMIN)
+                    helpPages.add(pageBuilder.build());
 
                 pageBuilder.setTitle("Mastr Help (Page " + (currentPage+1) + "/" + maxAllPages + ")");
                 adminHelpPages.add(pageBuilder.build());
@@ -217,7 +220,7 @@ public class HelpCommand extends CommandBase {
         eb.setTitle("`" + cmd.getCommand() + "`");
         eb.appendDescription(cmd.getDescription())
                 .appendDescription("\n\n**Syntax**:\n")
-                .appendDescription(syntaxJoin(cmd.getSyntax(), cmd.getCommand(), "\n")).appendDescription("\n");
+                .appendDescription(syntaxJoin(cmd.getSyntax(), cmd.getCommand())).appendDescription("\n");
 
         if(cmd.getAliases().length>0){
             eb.appendDescription("\n**Alias" + (cmd.getAliases().length>1 ? "es" : "") + "**: " + StringUtil.join(cmd.getAliases(), ", "));
@@ -231,16 +234,16 @@ public class HelpCommand extends CommandBase {
         return eb;
     }
 
-    private static String syntaxJoin(String[] syntax, String command, String combiner){
+    private static String syntaxJoin(String[] syntax, String command){
         StringBuilder sb = new StringBuilder();
         for (String s : syntax) {
             sb.append(command)
                     .append(" ")
                     .append(s)
-                    .append(combiner);
+                    .append("\n");
         }
 
-        return sb.substring(0, sb.length()-combiner.length());
+        return sb.substring(0, sb.length()-1);
     }
 
     private class HelpReactionListener extends ReactionListener {
