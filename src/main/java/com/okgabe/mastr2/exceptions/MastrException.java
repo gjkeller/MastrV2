@@ -8,12 +8,16 @@
 
 package com.okgabe.mastr2.exceptions;
 
-public class MemberSearchException extends MastrException {
-    public MemberSearchException(String message){
+/**
+ * Class for safely throwing exceptions that can be displayed publicly to users.
+ * Messages here will be printed as output to the user if an error occurs during the running of a command.
+ */
+public class MastrException extends RuntimeException {
+    public MastrException(String message){
         super(message);
     }
 
-    public MemberSearchException(String message, Throwable cause){
+    public MastrException(String message, Throwable cause){
         super(message, cause);
     }
 }

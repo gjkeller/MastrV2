@@ -34,23 +34,23 @@ public class UnsuspendCommand extends CommandBase {
     @Override
     public void execute(CommandEvent e) {
         if(!Checks.isId(e.getArgs()[0])){
-            e.getChannel().sendMessage("❌ Please provide a valid user ID to suspend").queue();
+            e.replyError("Please provide a valid user ID to suspend").queue();
             return;
         }
 
         long id = Long.parseLong(e.getArgs()[0]);
         BotUser target = mastr.getDatabaseManager().getBotUser(id);
         if(!e.getBotUser().getRole().isAtOrAbove(target.getRole())){
-            e.getChannel().sendMessage("❌ You don't have permission to interact with this individual").queue();
+            e.replyError("You don't have permission to interact with this individual").queue();
             return;
         }
 
         boolean result = mastr.getPermissionManager().unsuspend(target);
         if(result){
-            e.getChannel().sendMessage("✅ That individual has been unsuspended").queue();
+            e.replySuccess(" That individual has been unsuspended").queue();
         }
         else{
-            e.getChannel().sendMessage("❌ That individual was not suspended").queue();
+            e.replyError("That individual was not suspended").queue();
         }
     }
 }

@@ -34,23 +34,23 @@ public class PrefixCommand extends CommandBase {
     @Override
     public void execute(CommandEvent e) {
         if(e.getArgs().length == 0){
-            e.getChannel().sendMessage("This server's prefix is `" + e.getBotGuild().getPrefix() + "`").queue();
+            e.reply("This server's prefix is `" + e.getBotGuild().getPrefix() + "`").queue();
             return;
         }
         else if(e.getArgs().length>2){
-            e.getChannel().sendMessage("❌ Your prefix must not have more than one space").queue();
+            e.replyError("Your prefix must not have more than one space").queue();
             return;
         }
 
         String prefix = StringUtil.join(e.getArgs());
 
         if(e.getBotGuild().getPrefix().equals(prefix)){
-            e.getChannel().sendMessage("❌ This server's prefix is already `" + prefix + "`").queue();
+            e.replyError("This server's prefix is already `" + prefix + "`").queue();
             return;
         }
 
         if(prefix.length()>20){
-            e.getChannel().sendMessage("❌ Your prefix cannot be longer than 20 characters").queue();
+            e.replyError("Your prefix cannot be longer than 20 characters").queue();
             return;
         }
 
@@ -64,14 +64,15 @@ public class PrefixCommand extends CommandBase {
             }
 
             if(!isWhitelistedChar){
-                e.getChannel().sendMessage("❌ That message contains a blacklisted character: " + prefixChar).queue();
+                e.replyError("That message contains a blacklisted character: " + prefixChar).queue();
                 return;
             }
         }
 
+        prefix = prefix.toLowerCase();
         e.getBotGuild().setPrefix(prefix);
         e.getBotGuild().set(mastr.getDatabaseManager());
         mastr.getCacheManager().setPrefix(e.getBotGuild().getGuildId(), prefix);
-        e.getChannel().sendMessage("✅ This server's prefix has been changed to `" + prefix + "`").queue();
+        e.replySuccess("This server's prefix has been changed to `" + prefix + "`").queue();
     }
 }

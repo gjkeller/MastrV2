@@ -91,12 +91,13 @@ public class CommandHandler {
      */
     public void handleMessage(MessageReceivedEvent e, BotUser user, BotGuild guild){
         String content = e.getMessage().getContentRaw();
+        String contentLower = content.toLowerCase();
         String prefix = retrievePrefix(e.getGuild().getIdLong());
 
-        if(content.startsWith(prefix + " ")){
+        if(contentLower.startsWith(prefix + " ")){
             parseCommand(e.getMember(), e.getTextChannel(), e.getMessage(), prefix + " ", user, guild);
         }
-        else if(content.startsWith(prefix)){
+        else if(contentLower.startsWith(prefix)){
             parseCommand(e.getMember(), e.getTextChannel(), e.getMessage(), prefix, user, guild);
         }
         else if(content.startsWith("<@" + mastrId + ">")){

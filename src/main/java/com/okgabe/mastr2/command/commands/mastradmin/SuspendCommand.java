@@ -39,24 +39,24 @@ public class SuspendCommand extends CommandBase {
     public void execute(CommandEvent e) {
 
         if(!Checks.isId(e.getArgs()[0])){
-            e.getChannel().sendMessage("❌ Please provide a valid user ID to suspend").queue();
+            e.replyError("Please provide a valid user ID to suspend").queue();
             return;
         }
 
         long id = Long.parseLong(e.getArgs()[0]);
         BotUser target = mastr.getDatabaseManager().getBotUser(id);
         if(!e.getBotUser().getRole().isAtOrAbove(target.getRole())){
-            e.getChannel().sendMessage("❌ You don't have permission to interact with this individual").queue();
+            e.replyError("You don't have permission to interact with this individual").queue();
             return;
         }
 
         if(e.getArgs().length == 1){
             boolean result = mastr.getPermissionManager().suspend(target);
             if(result){
-                e.getChannel().sendMessage("✅ That individual has been permanently suspended from use of Mastr").queue();
+                e.replySuccess("That individual has been permanently suspended from use of Mastr").queue();
             }
             else{
-                e.getChannel().sendMessage("❌ That individual is already suspended").queue();
+                e.replyError("That individual is already suspended").queue();
             }
         }
         else{
@@ -65,10 +65,10 @@ public class SuspendCommand extends CommandBase {
 
             boolean result = mastr.getPermissionManager().suspend(target, SuspensionCode.TEMPORARY_SUSPENSION, timeSeconds + TimeUtil.getNow());
             if(result){
-                e.getChannel().sendMessage("✅ That individual has been temporarily suspended for " + TimeUtil.toStringLong(timeSeconds)).queue();
+                e.replySuccess(" That individual has been temporarily suspended for " + TimeUtil.toStringLong(timeSeconds)).queue();
             }
             else{
-                e.getChannel().sendMessage("❌ That individual is already permanently suspended").queue();
+                e.replyError("That individual is already permanently suspended").queue();
             }
         }
     }

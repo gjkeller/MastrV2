@@ -9,12 +9,15 @@
 package com.okgabe.mastr2.cache;
 
 import com.okgabe.mastr2.Mastr;
+import com.okgabe.mastr2.entity.BotUser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CacheManager {
     private Mastr mastr;
     private HashMap<Long, String> guildPrefixes;
+    private ArrayList<BotUser> botUsers;
 
     public CacheManager(Mastr mastr) {
         this.mastr = mastr;

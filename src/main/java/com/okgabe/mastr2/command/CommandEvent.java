@@ -11,12 +11,11 @@ package com.okgabe.mastr2.command;
 import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.entity.BotGuild;
 import com.okgabe.mastr2.entity.BotUser;
-import com.okgabe.mastr2.util.ColorConstants;
 import com.okgabe.mastr2.util.EmoteConstants;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -109,33 +108,27 @@ public class CommandEvent {
     }
 
     public MessageAction replyError(String message){
-        return replyError(message, null);
+        return channel.sendMessage( EmoteConstants.X_SYMBOL + " " + message);
     }
 
     public MessageAction replyError(String title, String message){
-        return channel.sendMessage(new EmbedBuilder()
-            .setTitle(EmoteConstants.X_SYMBOL + " " + title)
-            .setDescription(message)
-            .setColor(ColorConstants.ERROR_COLOR)
-            .build()
-        );
+        return channel.sendMessage( EmoteConstants.X_SYMBOL + " **" + title + "**\n" + message);
     }
 
     public MessageAction replySuccess(String message){
-        return replySuccess(message, null);
+        return channel.sendMessage( EmoteConstants.CHECK_SYMBOL + " " + message);
     }
 
     public MessageAction replySuccess(String title, String message){
-        return channel.sendMessage(new EmbedBuilder()
-                .setTitle(EmoteConstants.CHECK_SYMBOL + " " + title)
-                .setDescription(message)
-                .setColor(ColorConstants.SUCCESS_COLOR)
-                .build()
-        );
+        return channel.sendMessage( EmoteConstants.CHECK_SYMBOL + " **" + title + "**\n" + message);
     }
 
     public boolean isInGuild(){
         return message.isFromType(ChannelType.TEXT);
+    }
+
+    public void async(@NotNull Runnable runnable){
+        mastr.getScheduler().submit(runnable);
     }
 
     public JDA getJDA(){

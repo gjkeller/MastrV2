@@ -182,7 +182,7 @@ public class HelpCommand extends CommandBase {
             if(category == CommandCategory.MASTR_ADMIN){
                 maxDefaultPages = maxAllPages;
             }
-            maxAllPages += (cmds.size() / 5)+1;
+            maxAllPages += Math.ceil(cmds.size() / 5F);
         }
 
         int currentPage = -1;

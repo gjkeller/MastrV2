@@ -190,10 +190,10 @@ public class Mastr extends ListenerAdapter {
             directMessageHandler = new DirectMessageHandler(this);
             commandHandler = new CommandHandler(this);
 
-            logger.debug("Populating emote constants...");
+            logger.debug("Populating emote constants");
             EmoteConstants.updateEmotes(e.getJDA());
             logger.debug("Completed emote constant population");
-            logger.debug("Building help command...");
+            logger.debug("Building help command");
             HelpCommand helpCmd = commandHandler.getCommand(HelpCommand.class);
             helpCmd.buildCommandPages();
             helpCmd.buildIndividualCommandPages();

@@ -12,11 +12,8 @@ import com.okgabe.mastr2.Mastr;
 import com.okgabe.mastr2.command.CommandBase;
 import com.okgabe.mastr2.command.CommandCategory;
 import com.okgabe.mastr2.command.CommandEvent;
-import com.okgabe.mastr2.util.TimeUtil;
 
 public class PingCommand extends CommandBase {
-
-    private static final String[] responses = new String[] {"Hey!", "Hi!", "Hello!", "Heyy!", "Hii!"};
 
     public PingCommand(Mastr mastr) {
         super(mastr);
@@ -35,9 +32,9 @@ public class PingCommand extends CommandBase {
 
     @Override
     public void execute(CommandEvent e) {
-        long before = TimeUtil.getNowMillis();
-        e.getChannel().sendMessage(responses[(int)(Math.random()*responses.length)] + " \uD83D\uDC93 `" + e.getJDA().getGatewayPing() + "`ms").queue(m -> {
-            m.editMessage( m.getContentRaw() + "  /  ↔️ `" + (TimeUtil.getNowMillis() - before) + "`ms").queue();
+        long before = e.getMessage().getTimeCreated().toInstant().toEpochMilli();
+        e.getChannel().sendMessage("Ping! \uD83D\uDC93 `" + e.getJDA().getGatewayPing() + "`ms").queue(m -> {
+            m.editMessage( m.getContentRaw() + "  /  ↔️ `" + (m.getTimeCreated().toInstant().toEpochMilli() - before) + "`ms").queue();
         });
     }
 }
