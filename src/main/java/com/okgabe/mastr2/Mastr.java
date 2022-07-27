@@ -104,6 +104,9 @@ public class Mastr extends ListenerAdapter {
             System.exit(-1);
             return;
         }
+        else{
+            System.out.println("Log mode detected: " + logMode.levelStr);
+        }
 
         System.out.println("Configuring logger...");
         LoggerContext loggerContext = (LoggerContext)LoggerFactory.getILoggerFactory();
