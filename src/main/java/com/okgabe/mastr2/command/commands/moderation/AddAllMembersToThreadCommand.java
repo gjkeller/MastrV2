@@ -23,18 +23,18 @@ public class AddAllMembersToThreadCommand extends CommandBase {
 
     @Override
     public boolean called(CommandEvent e) {
-        return e.getArgs().length > 0;
+        return true;
     }
 
     @Override
     public void execute(CommandEvent e) {
         if(!e.getAuthor().isOwner()){
-            e.replyError("You must be the owner of the guild to run this command!");
+            e.replyError("You must be the owner of the guild to run this command!").queue();
             return;
         }
 
         if(!e.getChannel().getType().isThread()){
-            e.replyError("You must run this command in a thread!");
+            e.replyError("You must run this command in a thread!").queue();
             return;
         }
 
@@ -48,12 +48,12 @@ public class AddAllMembersToThreadCommand extends CommandBase {
                 role = e.getGuild().getRoleById(roleId);
             }
             catch(NumberFormatException ex){
-                e.replyError("Input a valid role id!");
+                e.replyError("Input a valid role id!").queue();
                 return;
             }
 
             if(role == null){
-                e.replyError("That ID was not a role!");
+                e.replyError("That ID was not a role!").queue();
                 return;
             }
         }
@@ -65,6 +65,6 @@ public class AddAllMembersToThreadCommand extends CommandBase {
             thread.addThreadMember(m).queue();
         }
 
-        e.reply("Done!");
+        e.reply("Done!").queue();
     }
 }
