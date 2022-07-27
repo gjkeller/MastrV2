@@ -48,6 +48,7 @@ public class CommandHandler {
             for(Class c : ReflectionUtil.getClasses("com.okgabe.mastr2.command.commands")){
                 if(c.isAnonymousClass()||c.isMemberClass()) continue;
                 commands.add((CommandBase)c.getConstructors()[0].newInstance(mastr));
+                logger.trace("Registering command from class " + c.getName());
             }
         }
         catch(Exception ex){
