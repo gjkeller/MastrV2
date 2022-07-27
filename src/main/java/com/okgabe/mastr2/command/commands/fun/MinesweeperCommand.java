@@ -15,7 +15,7 @@ import com.okgabe.mastr2.command.CommandEvent;
 import com.okgabe.mastr2.event.ResponseListener;
 import com.okgabe.mastr2.util.StringUtil;
 import net.dv8tion.jda.api.entities.ChannelType;
-import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.emoji.CustomEmoji;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
@@ -25,29 +25,29 @@ public class MinesweeperCommand extends CommandBase {
     private static final int COLUMNS = 9;
     private static final int ROWS = 9;
     
-    private Emote bombEmote;
-    private Emote flagEmote;
-    private Emote oneEmote;
-    private Emote twoEmote;
-    private Emote threeEmote;
-    private Emote fourEmote;
-    private Emote fiveEmote;
-    private Emote sixEmote;
-    private Emote sevenEmote;
-    private Emote eightEmote;
-    private Emote nineEmote;
+    private CustomEmoji bombEmote;
+    private CustomEmoji flagEmote;
+    private CustomEmoji oneEmote;
+    private CustomEmoji twoEmote;
+    private CustomEmoji threeEmote;
+    private CustomEmoji fourEmote;
+    private CustomEmoji fiveEmote;
+    private CustomEmoji sixEmote;
+    private CustomEmoji sevenEmote;
+    private CustomEmoji eightEmote;
+    private CustomEmoji nineEmote;
 
-    private Emote aEmote;
-    private Emote bEmote;
-    private Emote cEmote;
-    private Emote dEmote;
-    private Emote eEmote;
-    private Emote fEmote;
-    private Emote gEmote;
-    private Emote hEmote;
-    private Emote iEmote;
+    private CustomEmoji aEmote;
+    private CustomEmoji bEmote;
+    private CustomEmoji cEmote;
+    private CustomEmoji dEmote;
+    private CustomEmoji eEmote;
+    private CustomEmoji fEmote;
+    private CustomEmoji gEmote;
+    private CustomEmoji hEmote;
+    private CustomEmoji iEmote;
 
-    private Emote blankTile;
+    private CustomEmoji blankTile;
 
     private String flag;
     private String bomb;
@@ -60,29 +60,29 @@ public class MinesweeperCommand extends CommandBase {
         this.category = CommandCategory.FUN;
         this.syntax = new String[] {""};
         
-        bombEmote = mastr.getShardManager().getEmoteById(746599421764173944L);
-        flagEmote = mastr.getShardManager().getEmoteById(746601049854574694L);
-        oneEmote = mastr.getShardManager().getEmoteById(746642432728236092L);
-        twoEmote = mastr.getShardManager().getEmoteById(746642432690487307L);
-        threeEmote = mastr.getShardManager().getEmoteById(746642432770179173L);
-        fourEmote = mastr.getShardManager().getEmoteById(746642432732561508L);
-        fiveEmote = mastr.getShardManager().getEmoteById(746642432522715178L);
-        sixEmote = mastr.getShardManager().getEmoteById(746642432472514581L);
-        sevenEmote = mastr.getShardManager().getEmoteById(746642432342491210L);
-        eightEmote = mastr.getShardManager().getEmoteById(746642432736755752L);
-        nineEmote = mastr.getShardManager().getEmoteById(746642432745013308L);
+        bombEmote = mastr.getShardManager().getEmojiById(746599421764173944L);
+        flagEmote = mastr.getShardManager().getEmojiById(746601049854574694L);
+        oneEmote = mastr.getShardManager().getEmojiById(746642432728236092L);
+        twoEmote = mastr.getShardManager().getEmojiById(746642432690487307L);
+        threeEmote = mastr.getShardManager().getEmojiById(746642432770179173L);
+        fourEmote = mastr.getShardManager().getEmojiById(746642432732561508L);
+        fiveEmote = mastr.getShardManager().getEmojiById(746642432522715178L);
+        sixEmote = mastr.getShardManager().getEmojiById(746642432472514581L);
+        sevenEmote = mastr.getShardManager().getEmojiById(746642432342491210L);
+        eightEmote = mastr.getShardManager().getEmojiById(746642432736755752L);
+        nineEmote = mastr.getShardManager().getEmojiById(746642432745013308L);
 
-        aEmote = mastr.getShardManager().getEmoteById(746645135760293908L);
-        bEmote = mastr.getShardManager().getEmoteById(746645135671951401L);
-        cEmote = mastr.getShardManager().getEmoteById(746645135412166748L);
-        dEmote = mastr.getShardManager().getEmoteById(746645135688728606L);
-        eEmote = mastr.getShardManager().getEmoteById(746645135630008360L);
-        fEmote = mastr.getShardManager().getEmoteById(746645135592521769L);
-        gEmote = mastr.getShardManager().getEmoteById(746645135609036841L);
-        hEmote = mastr.getShardManager().getEmoteById(746645135328018463L);
-        iEmote = mastr.getShardManager().getEmoteById(746645135663562782L);
+        aEmote = mastr.getShardManager().getEmojiById(746645135760293908L);
+        bEmote = mastr.getShardManager().getEmojiById(746645135671951401L);
+        cEmote = mastr.getShardManager().getEmojiById(746645135412166748L);
+        dEmote = mastr.getShardManager().getEmojiById(746645135688728606L);
+        eEmote = mastr.getShardManager().getEmojiById(746645135630008360L);
+        fEmote = mastr.getShardManager().getEmojiById(746645135592521769L);
+        gEmote = mastr.getShardManager().getEmojiById(746645135609036841L);
+        hEmote = mastr.getShardManager().getEmojiById(746645135328018463L);
+        iEmote = mastr.getShardManager().getEmojiById(746645135663562782L);
 
-        blankTile = mastr.getShardManager().getEmoteById(746647537913561128L);
+        blankTile = mastr.getShardManager().getEmojiById(746647537913561128L);
 
         flag = flagEmote.getAsMention();
         bomb = bombEmote.getAsMention();

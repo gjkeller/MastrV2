@@ -13,22 +13,26 @@ import com.okgabe.mastr2.command.CommandEvent;
 import com.okgabe.mastr2.event.ResponseListener;
 import com.okgabe.mastr2.exceptions.MemberSearchException;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.unions.ChannelUnion;
+import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 
 import java.util.List;
 
 public class GuildUtil {
 
     public static ActionableFutureImpl<Member> retrieveMemberByName(CommandEvent e, String search){
-        return retrieveMemberByName(e.getMastr(), e.getMessage().getTextChannel(), e.getAuthor(), search, true);
+        return retrieveMemberByName(e.getMastr(), e.getMessage().getChannel(), e.getAuthor(), search, true);
     }
 
     public static ActionableFutureImpl<Member> retrieveMemberByName(CommandEvent e, String search, boolean allowClarification){
-        return retrieveMemberByName(e.getMastr(), e.getMessage().getTextChannel(), e.getAuthor(), search, allowClarification);
+        return retrieveMemberByName(e.getMastr(), e.getMessage().getChannel(), e.getAuthor(), search, allowClarification);
     }
 
-    public static ActionableFutureImpl<Member> retrieveMemberByName(Mastr mastr, TextChannel channel, Member invoker, String search, boolean allowClarification){
+    public static ActionableFutureImpl<Member> retrieveMemberByName(Mastr mastr, MessageChannelUnion channelUnion, Member invoker, String search, boolean allowClarification){
         ActionableFutureImpl<Member> returnFuture = new ActionableFutureImpl<>();
+        TextChannel channel = channelUnion.asTextChannel(); // TODO address potential exception
 
         channel.getGuild().retrieveMembersByPrefix(search, 100).onSuccess(members -> {
             if(members.size() == 0){ // No results

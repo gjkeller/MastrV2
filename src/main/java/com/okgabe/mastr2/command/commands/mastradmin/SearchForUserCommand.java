@@ -36,7 +36,7 @@ public class SearchForUserCommand extends CommandBase {
         if(!e.isInGuild()) return;
 
         String search = e.getArgs()[0];
-        GuildUtil.retrieveMemberByName(mastr, e.getMessage().getTextChannel(), e.getAuthor(), search, true)
+        GuildUtil.retrieveMemberByName(mastr, e.getMessage().getChannel(), e.getAuthor(), search, true)
                 .onError(err -> e.getChannel().sendMessage(err.getMessage()).queue())
                 .onSuccess(member -> e.getChannel().sendMessage("Your search returned " + StringUtil.nameAndTag(member) + " (" + member.getId() + ")").queue());
     }

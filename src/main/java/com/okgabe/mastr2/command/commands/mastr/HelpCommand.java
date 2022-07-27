@@ -20,6 +20,7 @@ import com.okgabe.mastr2.util.StringUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.requests.RestAction;
 
 import java.util.*;
@@ -90,7 +91,7 @@ public class HelpCommand extends CommandBase {
                     e.getChannel().sendMessage(EmoteConstants.X_SYMBOL + " You don't have permission to access that command.").queue();
                 }
                 else{
-                    e.getChannel().sendMessage(commandHelp.get(cmd)).queue();
+                    e.getChannel().sendMessageEmbeds(commandHelp.get(cmd)).queue();
                 }
             }
         }
@@ -99,11 +100,11 @@ public class HelpCommand extends CommandBase {
     public void sendHelpEmbed(User owner, MessageChannel channel, int page, boolean admin){
         MessageEmbed embedPage = (page == -1 ? FRONT_PAGE : (admin ? adminHelpPages.get(page) : helpPages.get(page)));
 
-        channel.sendMessage(embedPage).queue(m -> {
+        channel.sendMessageEmbeds(embedPage).queue(m -> {
             HelpReactionListener helpReactionListener = new HelpReactionListener(owner.getJDA(), channel.getType(), channel.getIdLong(), m.getIdLong(), owner.getIdLong(), 5*60,
                     reaction -> {
                 HelpReactionListener listener = (HelpReactionListener) reaction;
-                String name = listener.getReaction().getReactionEmote().getName();
+                String name = listener.getReaction().getEmoji().getName();
                 boolean updated = false;
                 switch(name) {
                     case "⏪":
@@ -136,17 +137,17 @@ public class HelpCommand extends CommandBase {
 
             mastr.getReactionHandler().register(helpReactionListener);
             // Set failure hook to nothing in-case someone deletes the message before reactions are done
-            m.addReaction("⏪").queue(ignoredm -> {}, f -> {});
-            m.addReaction("◀").queue(ignoredm -> {}, f -> {});
-            m.addReaction("▶").queue(ignoredm -> {}, f -> {});
-            m.addReaction("⏩").queue(ignoredm -> {}, f -> {});
-            m.addReaction("\u23F9").queue(ignoredm -> {}, f -> {});
-            m.addReaction("\uD83D\uDCE5").queue(ignoredm -> {}, f -> {});
+            m.addReaction(Emoji.fromUnicode("⏪")).queue(ignoredm -> {}, f -> {});
+            m.addReaction(Emoji.fromUnicode("◀")).queue(ignoredm -> {}, f -> {});
+            m.addReaction(Emoji.fromUnicode("▶")).queue(ignoredm -> {}, f -> {});
+            m.addReaction(Emoji.fromUnicode("⏩")).queue(ignoredm -> {}, f -> {});
+            m.addReaction(Emoji.fromUnicode("\u23F9")).queue(ignoredm -> {}, f -> {});
+            m.addReaction(Emoji.fromUnicode("\uD83D\uDCE5")).queue(ignoredm -> {}, f -> {});
         });
     }
 
     public void setPage(Message m, int page, boolean admin){
-        m.editMessage((admin ? adminHelpPages.get(page) : helpPages.get(page))).queue(s -> {}, f -> {});
+        m.editMessageEmbeds((admin ? adminHelpPages.get(page) : helpPages.get(page))).queue(s -> {}, f -> {});
     }
 
     public void buildIndividualCommandPages(){

@@ -95,24 +95,24 @@ public class CommandHandler {
         String prefix = retrievePrefix(e.getGuild().getIdLong());
 
         if(contentLower.startsWith(prefix + " ")){
-            parseCommand(e.getMember(), e.getTextChannel(), e.getMessage(), prefix + " ", user, guild);
+            parseCommand(e.getMember(), e.getChannel(), e.getMessage(), prefix + " ", user, guild);
         }
         else if(contentLower.startsWith(prefix)){
-            parseCommand(e.getMember(), e.getTextChannel(), e.getMessage(), prefix, user, guild);
+            parseCommand(e.getMember(), e.getChannel(), e.getMessage(), prefix, user, guild);
         }
         else if(content.startsWith("<@" + mastrId + ">")){
             if(content.trim().length() == 21){
                 e.getChannel().sendMessage("Hey! My prefix for this server is `" + prefix.trim() + "`. If you need help, you can use `" + prefix + "help` or DM me!" +
                         "\nIf you don't like remembering bot prefixes, mentioning me works as a command prefix as well.").queue();
             }
-            else parseCommand(e.getMember(), e.getTextChannel(), e.getMessage(), "<@" + mastrId + "> ", user, guild);
+            else parseCommand(e.getMember(), e.getChannel(), e.getMessage(), "<@" + mastrId + "> ", user, guild);
         }
         else if(content.startsWith("<@!" + mastrId + ">")){
             if(content.trim().length() == 22){
                 e.getChannel().sendMessage("Hey! My prefix for this server is `" + prefix.trim() + "`. If you need help, you can use `" + prefix + "help` or DM me!" +
                         "\nIf you don't like remembering bot prefixes, mentioning me works as a command prefix as well.").queue();
             }
-            else parseCommand(e.getMember(), e.getTextChannel(), e.getMessage(), "<@!" + mastrId + "> ", user, guild);
+            else parseCommand(e.getMember(), e.getChannel(), e.getMessage(), "<@!" + mastrId + "> ", user, guild);
         }
     }
 

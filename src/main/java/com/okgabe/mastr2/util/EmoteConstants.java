@@ -16,8 +16,8 @@ public class EmoteConstants {
     public static String X_SYMBOL;
 
     public static void updateEmotes(JDA jda){
-        MASTR_LOGO = jda.getEmoteById(403741198155776001L).getAsMention();
-        CHECK_SYMBOL = jda.getEmoteById(777322609284087850L).getAsMention();
-        X_SYMBOL = jda.getEmoteById(777322609683071016L).getAsMention();
+        MASTR_LOGO = jda.getEmojiById(403741198155776001L).getAsMention();
+        CHECK_SYMBOL = jda.getEmojiById(777322609284087850L).getAsMention();
+        X_SYMBOL = jda.getEmojiById(777322609683071016L).getAsMention();
     }
 }

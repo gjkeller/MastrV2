@@ -96,7 +96,7 @@ public class CommandEvent {
     }
 
     public MessageAction reply(MessageEmbed message){
-        return channel.sendMessage(message);
+        return channel.sendMessageEmbeds(message);
     }
 
     public void reply(String message, Consumer<Message> afterExecute){
@@ -104,7 +104,7 @@ public class CommandEvent {
     }
 
     public void reply(MessageEmbed message, Consumer<Message> afterExecute){
-        channel.sendMessage(message).queue(afterExecute);
+        channel.sendMessageEmbeds(message).queue(afterExecute);
     }
 
     public MessageAction replyError(String message){
