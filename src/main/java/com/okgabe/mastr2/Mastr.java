@@ -28,6 +28,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import org.hjson.JsonObject;
@@ -40,10 +41,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -165,7 +163,7 @@ public class Mastr extends ListenerAdapter {
         logger.info("Connection successful. Authentication will begin on the next transaction.");
         logger.info("Starting the bot");
         try{
-            DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(token);
+            DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(token).enableIntents(EnumSet.allOf(GatewayIntent.class));
             eventManager = new EventManager(this);
             builder.addEventListeners(this, eventManager);
             shardManager = builder.build();
